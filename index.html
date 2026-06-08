@@ -119,7 +119,6 @@ const finalTestHOTS = [
   { id: 20, type: 'mcc', q: "(Pilih Lebih Dari Satu) Asesmen adaptif untuk pelajaran PJOK (Olahraga) di SD bagi siswa Tunadaksa (kelumpuhan kaki) materi Atletik Lari adalah...", options: ["Memberi nilai 0 otomatis karena fisiknya tidak mampu", "Mengganti asesmen dengan aktivitas yang mengukur daya tahan bagian tubuh atas (misal: lempar tangkap bola modifikasi)", "Melibatkan siswa sebagai pencatat skor atau juri garis (partisipasi fungsional)", "Memaksa siswa ikut berlari sejauh kemampuannya walau sakit"], a: [1, 2] }
 ];
 
-// DATA AKTIVITAS MANDIRI AUTO-GRADING
 const activityData = [
   {
     level: 1, title: 'Mitos Atau Fakta?',
@@ -205,10 +204,9 @@ const activityData = [
 
 const state = {
     user: { name: '', school: '', isLogged: false },
-    currentView: 'login', // login, dashboard, m1, m2, m3, m4, activity, plan, final, cert
+    currentView: 'login', 
     scores: { m1: null, m2: null, m3: null, m4: null },
     
-    // Aktivitas Mandiri - Auto Grading State
     activityQuest: {
         currentLevel: 1,
         totalPoints: 0,
@@ -221,7 +219,6 @@ const state = {
     tempAnswers: {} 
 };
 
-// --- RENDER UTILITY ---
 const appDiv = document.getElementById('app');
 
 function showToast(msg, type = 'info') {
@@ -242,11 +239,132 @@ function showToast(msg, type = 'info') {
     }, 3500);
 }
 
-function updateState() {
-    render();
+function renderLogin() {
+    return `
+        <div class="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+            <div class="max-w-md w-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden fade-in">
+                <div class="bg-indigo-600 p-8 text-center">
+                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-3xl">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h1 class="text-2xl font-black text-white leading-tight">Pendidikan Inklusif SD</h1>
+                    <p class="text-indigo-100 font-medium mt-2">Wujudkan Pendidikan Bermutu Untuk Semua</p>
+                </div>
+                <div class="p-8">
+                    <h2 class="text-lg font-bold mb-6 text-center text-slate-700">Selamat Datang Pendidik Hebat!</h2>
+                    <form id="loginForm" class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Nama Lengkap (Beserta Gelar)</label>
+                            <input type="text" id="inputName" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 focus:outline-none transition-all" placeholder="Misal: Budi Santoso, S.Pd" value="${state.user.name}" required />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Satuan Pendidikan</label>
+                            <input type="text" id="inputSchool" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 focus:outline-none transition-all" placeholder="Misal: SDN 01 Harapan Bangsa" value="${state.user.school}" required />
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-4 rounded-xl transition duration-200 mt-6 flex items-center justify-center gap-2 shadow-lg shadow-indigo-200">
+                            Mulai Pelatihan <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
-// ... existing code (renderLogin, renderSidebar, renderDashboard, renderMateri) ...
+function renderSidebar() {
+    const menuItems = [
+        { id: 'dashboard', label: 'Beranda & Panduan', icon: 'fa-home' },
+        { id: 'm1', label: 'Materi 1: Miskonsepsi', icon: 'fa-play-circle', completed: state.scores.m1 !== null },
+        { id: 'm2', label: 'Materi 2: Pengertian', icon: 'fa-play-circle', completed: state.scores.m2 !== null },
+        { id: 'm3', label: 'Materi 3: Adaptasi', icon: 'fa-play-circle', completed: state.scores.m3 !== null },
+        { id: 'm4', label: 'Materi 4: Kebutuhan Khusus', icon: 'fa-play-circle', completed: state.scores.m4 !== null },
+        { id: 'activity', label: 'Aktivitas Mandiri', icon: 'fa-tasks' },
+        { id: 'plan', label: 'Rencana Aksi', icon: 'fa-edit' },
+        { id: 'final', label: 'Tes Akhir (HOTS)', icon: 'fa-book-open' },
+    ];
+
+    const certUnlocked = state.finalScore !== null && state.finalScore >= 70;
+
+    let navHtml = menuItems.map(item => `
+        <button onclick="changeView('${item.id}')" 
+            class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition-all
+            ${state.currentView === item.id ? 'bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-200' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'}">
+            <span class="${state.currentView === item.id ? 'text-indigo-600' : 'text-slate-400'}"><i class="fas ${item.icon}"></i></span>
+            <span class="flex-1 text-left">${item.label}</span>
+            ${item.completed ? '<i class="fas fa-check-circle text-emerald-500"></i>' : ''}
+        </button>
+    `).join('');
+
+    return `
+        <div class="w-full md:w-80 bg-white shadow-xl md:min-h-screen flex flex-col no-print md:sticky md:top-0 border-r border-slate-200 z-10">
+            <div class="p-6 border-b border-indigo-700 bg-indigo-600 text-white">
+                <h2 class="font-black text-xl tracking-tight leading-tight">LMS Inklusif SD</h2>
+                <div class="mt-5 flex items-center gap-3 bg-indigo-700/50 p-3 rounded-xl border border-indigo-500/30">
+                    <div class="w-10 h-10 rounded-full bg-indigo-200 text-indigo-800 flex items-center justify-center font-bold">
+                        <i class="fas fa-user text-lg"></i>
+                    </div>
+                    <div class="overflow-hidden flex-1">
+                        <p class="font-bold text-sm truncate capitalize">${state.user.name}</p>
+                        <p class="text-indigo-200 text-xs truncate mt-0.5 capitalize">${state.user.school}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                <nav class="space-y-1.5">
+                    ${navHtml}
+                    <button onclick="${certUnlocked ? "changeView('cert')" : "showToast('Lulus Tes Akhir (Min 70) untuk membuka sertifikat.', 'warning')"}" 
+                        class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition-all mt-6
+                        ${certUnlocked ? (state.currentView === 'cert' ? 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-300' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 ring-1 ring-emerald-200') : 'bg-slate-50 text-slate-400 cursor-not-allowed border border-slate-200'}">
+                        <i class="fas fa-award ${certUnlocked ? 'text-emerald-500' : 'text-slate-300'} text-lg"></i>
+                        <span class="flex-1 text-left">Sertifikat Kelulusan</span>
+                        ${!certUnlocked ? '<i class="fas fa-lock"></i>' : ''}
+                    </button>
+                </nav>
+            </div>
+        </div>
+    `;
+}
+
+function renderDashboard() {
+    return `
+        <div class="space-y-8 fade-in">
+            <div class="text-center pb-8 border-b border-slate-200">
+                <div class="inline-flex w-20 h-20 items-center justify-center rounded-2xl bg-indigo-50 mb-4 text-indigo-600 text-4xl shadow-sm">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight">Pendidikan Inklusif SD</h2>
+                <p class="text-xl md:text-2xl text-indigo-600 font-bold mt-3">Wujudkan Pendidikan Bermutu Untuk Semua</p>
+            </div>
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
+                <h3 class="text-2xl font-bold flex items-center gap-3 mb-6 text-slate-800">
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center text-2xl"><i class="fas fa-award"></i></div>
+                    Tujuan Pelatihan
+                </h3>
+                <ul class="space-y-4 text-slate-600 font-medium text-lg leading-relaxed">
+                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Membongkar miskonsepsi mengenai pendidikan inklusif di lingkungan SD.</span></li>
+                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Memahami pengertian esensial dan landasan filosofis pendidikan untuk semua.</span></li>
+                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Menerapkan prinsip adaptasi kurikulum serta lingkungan fisik dan sosial SD.</span></li>
+                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Mengenal jenis kebutuhan khusus peserta didik (ABK).</span></li>
+                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Melatih kemampuan menganalisis studi kasus nyata berbasis HOTS di Sekolah Dasar.</span></li>
+                </ul>
+            </div>
+            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h3 class="text-2xl font-bold flex items-center gap-3 mb-6 text-indigo-900">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xl shadow-md"><i class="fas fa-book-open"></i></div>
+                    Panduan Penggunaan LMS
+                </h3>
+                <ol class="space-y-5 text-indigo-900 font-medium md:text-lg">
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-indigo-200 text-indigo-800 flex items-center justify-center font-black shrink-0">1</span> <span>Gunakan menu di <strong>panel kiri</strong> untuk bernavigasi secara berurutan.</span></li>
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-indigo-200 text-indigo-800 flex items-center justify-center font-black shrink-0">2</span> <span>Pelajari materi melalui <strong>Video Embed</strong> pada tiap bagian.</span></li>
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-indigo-200 text-indigo-800 flex items-center justify-center font-black shrink-0">3</span> <span>Kerjakan 10 soal uji pemahaman (Kuis) setelah menonton video materi.</span></li>
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-amber-200 text-amber-800 flex items-center justify-center font-black shrink-0">4</span> <span>Selesaikan <strong>Aktivitas Mandiri</strong> (Sistem Penilaian Otomatis 5 Level). Level berikutnya terbuka jika nilai minimal <strong>80</strong>.</span></li>
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-indigo-200 text-indigo-800 flex items-center justify-center font-black shrink-0">5</span> <span>Tulis komitmen nyata Anda di <strong>Rencana Aksi</strong>.</span></li>
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-emerald-200 text-emerald-800 flex items-center justify-center font-black shrink-0">6</span> <span>Selesaikan <strong>Tes Akhir (HOTS)</strong>. Sertifikat otomatis terbuka jika Anda lulus (Nilai min 70).</span></li>
+                </ol>
+            </div>
+        </div>
+    `;
+}
 
 function renderMateri(id) {
     const data = materiData.find(m => m.id === id);
@@ -297,12 +415,12 @@ function renderMateri(id) {
             </div>
             <div class="mt-10 pt-10 border-t border-slate-200">
                 <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl"><i class="fas fa-pencil-alt"></i></div>
+                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl"><i class="fas fa-pencil-alt"></i></div>
                     <h3 class="text-2xl font-bold text-slate-800">Uji Pemahaman</h3>
                 </div>
                 ${scoreAlert}
                 <div class="space-y-6">${qsHtml}</div>
-                ${!submitted ? `<button onclick="submitMateri('${id}')" class="w-full mt-8 bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-2xl text-lg shadow-lg transition-all flex justify-center gap-2 items-center">Kumpulkan Jawaban <i class="fas fa-paper-plane"></i></button>` : ''}
+                ${!submitted ? `<button onclick="submitMateri('${id}')" class="w-full mt-8 bg-slate-800 hover:bg-slate-900 text-white font-bold py-5 rounded-2xl text-xl shadow-lg transition-all flex justify-center gap-3 items-center">Kumpulkan Jawaban <i class="fas fa-paper-plane"></i></button>` : ''}
             </div>
         </div>
     `;
@@ -311,9 +429,8 @@ function renderMateri(id) {
 function renderActivity() {
     const st = state.activityQuest;
     const l = st.currentLevel;
-    const actData = activityData[l - 1]; // Array index 0-4
+    const actData = activityData[l - 1];
     
-    // Header & Nav Bar Level 1-5
     let navHtml = [1, 2, 3, 4, 5].map(lvl => {
         const isEval = st.scores[`l${lvl}`] !== null;
         const score = isEval ? st.scores[`l${lvl}`] : 0;
@@ -329,11 +446,9 @@ function renderActivity() {
         return `<button class="${btnCls}" ${!isUnlocked ? 'disabled' : `onclick="changeQuestLevel(${lvl})"`}>${content}</button>`;
     }).join('');
 
-    // Evaluator status
     const levelScore = st.scores[`l${l}`];
     const isEvaluated = levelScore !== null;
     
-    // Render the MCQs
     let questionsHtml = actData.q.map((q, idx) => {
         let optionsHtml = q.a.map((opt, optIdx) => {
             const isChecked = st.tempAnswers[idx] === optIdx;
@@ -362,7 +477,6 @@ function renderActivity() {
         `;
     }).join('');
 
-    // Determine Predicate
     let predText = '';
     if(st.totalPoints >= 450) predText = '🏆 Champion of Inclusive Education';
     else if(st.totalPoints >= 400) predText = '🥇 Inclusive Education Expert';
@@ -374,37 +488,37 @@ function renderActivity() {
         <div class="space-y-8 fade-in relative">
             <div class="flex flex-col md:flex-row items-center justify-between border-b border-slate-200 pb-6">
                 <div>
-                    <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Aktivitas Mandiri</h2>
-                    <p class="text-slate-500 font-medium mt-1">Sistem Penilaian Otomatis - Selesaikan Misi Anda</p>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight">Aktivitas Mandiri</h2>
+                    <p class="text-slate-500 font-medium mt-2 text-lg">Sistem Penilaian Otomatis - Selesaikan Misi Anda</p>
                 </div>
-                <div class="mt-4 md:mt-0 flex flex-col items-end">
+                <div class="mt-6 md:mt-0 flex flex-col items-end">
                     <div class="flex gap-3">${navHtml}</div>
-                    <div class="mt-3 text-sm font-bold bg-slate-100 py-1.5 px-3 rounded-lg text-slate-600 border border-slate-200">
-                        Total Poin: <span class="text-indigo-600 text-lg">${st.totalPoints}/500</span>
+                    <div class="mt-4 text-sm font-bold bg-slate-100 py-2 px-4 rounded-xl text-slate-600 border border-slate-200">
+                        Total Poin: <span class="text-indigo-600 text-xl">${st.totalPoints}/500</span>
                     </div>
                 </div>
             </div>
             
-            ${st.totalPoints > 0 ? `<div class="bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200 p-4 rounded-xl text-center font-bold text-amber-800 shadow-sm">Pencapaian Saat Ini: ${predText}</div>` : ''}
+            ${st.totalPoints > 0 ? `<div class="bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200 p-5 rounded-2xl text-center font-bold text-amber-900 shadow-sm text-lg">Pencapaian Saat Ini: ${predText}</div>` : ''}
 
             <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm">
-                <div class="mb-6">
-                    <h3 class="text-2xl font-bold text-indigo-900 mb-2">Level ${l}: ${actData.title}</h3>
-                    <p class="text-slate-600 font-medium">${actData.desc}</p>
+                <div class="mb-8">
+                    <h3 class="text-2xl md:text-3xl font-black text-indigo-900 mb-3">Level ${l}: ${actData.title}</h3>
+                    <p class="text-slate-600 font-medium text-lg leading-relaxed">${actData.desc}</p>
                 </div>
                 
                 ${isEvaluated ? `
-                    <div class="mb-8 p-6 bg-emerald-50 border-2 border-emerald-400 border-dashed rounded-2xl text-center">
-                        <h3 class="text-2xl font-black text-emerald-800">Skor Level ${l}: ${levelScore} / 100</h3>
-                        <p class="text-emerald-600 font-medium mt-2">Evaluasi otomatis telah selesai. Review jawaban Anda.</p>
-                        ${levelScore < 80 ? `<button onclick="retryActivity(${l})" class="mt-4 px-6 py-2 bg-white border-2 border-emerald-300 text-emerald-700 rounded-xl text-sm font-bold hover:bg-emerald-100 transition-all shadow-sm">Coba Ulang Level ${l}</button>` : ''}
+                    <div class="mb-8 p-8 bg-emerald-50 border-2 border-emerald-400 border-dashed rounded-3xl text-center slide-up">
+                        <h3 class="text-3xl font-black text-emerald-800">Skor Level ${l}: ${levelScore} / 100</h3>
+                        <p class="text-emerald-600 font-medium mt-2 text-lg">Evaluasi otomatis selesai. Review jawaban Anda di bawah.</p>
+                        ${levelScore < 80 ? `<button onclick="retryActivity(${l})" class="mt-5 px-8 py-3 bg-white border-2 border-emerald-300 text-emerald-700 rounded-xl text-base font-bold hover:bg-emerald-100 transition-all shadow-sm">Coba Ulang Level ${l}</button>` : ''}
                     </div>
                 ` : ''}
 
                 <div class="space-y-6">${questionsHtml}</div>
                 
                 ${!isEvaluated ? `
-                    <button onclick="submitActivityLevel(${l})" class="w-full mt-10 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex justify-center gap-2 items-center text-lg">
+                    <button onclick="submitActivityLevel(${l})" class="w-full mt-10 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-5 rounded-2xl shadow-xl transition-all flex justify-center gap-3 items-center text-xl">
                         Kirim & Evaluasi Sistem <i class="fas fa-cogs"></i>
                     </button>
                 ` : ''}
@@ -413,84 +527,23 @@ function renderActivity() {
     `;
 }
 
-// System Auto-Grading Logic
-function setActivityAnswer(qIdx, optIdx) {
-    state.activityQuest.tempAnswers[qIdx] = optIdx;
-    render();
-}
-
-function submitActivityLevel(lvl) {
-    const actData = activityData[lvl - 1];
-    
-    // Check if 10 questions answered
-    for (let i = 0; i < 10; i++) {
-        if (state.activityQuest.tempAnswers[i] === undefined) {
-            showToast("Harap selesaikan seluruh 10 soal di level ini!", "error");
-            return;
-        }
-    }
-
-    let correct = 0;
-    actData.q.forEach((q, idx) => {
-        if (state.activityQuest.tempAnswers[idx] === q.c) correct++;
-    });
-
-    const score = correct * 10; // 10 points each
-    state.activityQuest.scores[`l${lvl}`] = score;
-    
-    // Recalculate total points
-    let gTotal = 0;
-    for(let i=1; i<=5; i++) {
-        gTotal += (state.activityQuest.scores[`l${i}`] || 0);
-    }
-    state.activityQuest.totalPoints = gTotal;
-    
-    if (score >= 80) {
-        showToast(`Hebat! Level ${lvl} Selesai dengan nilai ${score}.`, 'success');
-        if (lvl < 5 && state.activityQuest.currentLevel === lvl) {
-            state.activityQuest.currentLevel = lvl + 1; // move to next unlocked
-            state.activityQuest.tempAnswers = {}; // reset for next
-        }
-    } else {
-        showToast(`Nilai ${score}. Butuh 80 untuk lulus level ini. Coba perbaiki!`, 'error');
-    }
-    render();
-    window.scrollTo(0,0);
-}
-
-function retryActivity(lvl) {
-    state.activityQuest.scores[`l${lvl}`] = null;
-    state.activityQuest.tempAnswers = {};
-    render();
-}
-
-function changeQuestLevel(lvl) {
-    if (lvl > 1 && (state.activityQuest.scores[`l${lvl-1}`] === null || state.activityQuest.scores[`l${lvl-1}`] < 80)) {
-        showToast("Selesaikan level sebelumnya dengan nilai minimal 80!", "warning");
-        return;
-    }
-    state.activityQuest.currentLevel = lvl;
-    state.activityQuest.tempAnswers = {}; // Clear temp if changing level midway
-    
-    // If revisiting a completed level, prefill answers visually? 
-    // We didn't save historical answers per level, just the final score, so revisiting will clear visually.
-    render();
-}
-
 function renderPlan() {
     return `
-        <div class="space-y-6 fade-in">
-            <h2 class="text-3xl font-extrabold text-slate-800 flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl"><i class="fas fa-rocket"></i></div> Rencana Aksi</h2>
-            <p class="text-slate-600 font-medium">Setelah menyelesaikan Aktivitas Mandiri, tulislah langkah nyata yang akan Anda lakukan di kelas/sekolah Anda.</p>
-            <div class="bg-amber-50 p-5 border-l-4 border-amber-400 rounded-r-xl shadow-sm">
-                <p class="text-sm text-amber-800 font-bold mb-2">Panduan Penulisan:</p>
-                <ul class="text-sm text-amber-800 list-disc pl-5 space-y-1">
-                    <li>Fokus pada adaptasi fisik kelas atau adaptasi metode mengajar.</li>
-                    <li>Sebutkan kolaborasi yang akan Anda jalin (Tripusat Pendidikan).</li>
+        <div class="space-y-8 fade-in">
+            <h2 class="text-4xl font-extrabold text-slate-800 flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl shadow-sm"><i class="fas fa-rocket"></i></div> 
+                Rencana Aksi
+            </h2>
+            <p class="text-slate-600 font-medium text-lg">Setelah menyelesaikan Aktivitas Mandiri, tulislah langkah nyata yang akan Anda lakukan di kelas/sekolah Anda dalam 1 hingga 3 bulan ke depan.</p>
+            <div class="bg-amber-50 p-6 border-l-4 border-amber-400 rounded-r-2xl shadow-sm">
+                <p class="text-base text-amber-900 font-bold mb-2">Panduan Penulisan:</p>
+                <ul class="text-base text-amber-800 list-disc pl-5 space-y-2">
+                    <li>Fokus pada adaptasi fisik kelas atau adaptasi metode mengajar secara spesifik.</li>
+                    <li>Sebutkan wujud kolaborasi yang akan Anda jalin dengan orang tua atau teman sejawat.</li>
                 </ul>
             </div>
-            <textarea id="planText" class="w-full h-64 p-5 border border-slate-300 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none resize-none text-slate-700 shadow-inner font-medium text-lg leading-relaxed" placeholder="Ketik rencana aksi Anda di sini...">${state.actionPlan}</textarea>
-            <button onclick="savePlan()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all w-full md:w-auto text-lg">Simpan Komitmen</button>
+            <textarea id="planText" class="w-full h-72 p-6 border border-slate-300 rounded-3xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none resize-none text-slate-700 shadow-inner font-medium text-lg leading-relaxed" placeholder="Ketik rencana aksi Anda di sini...">${state.actionPlan}</textarea>
+            <button onclick="savePlan()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-5 px-10 rounded-2xl shadow-lg transition-all w-full md:w-auto text-xl">Simpan Komitmen</button>
         </div>
     `;
 }
@@ -541,13 +594,13 @@ function renderFinalTest() {
         return `
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-6">
                 <div class="flex gap-4 items-start mb-6">
-                    <span class="w-10 h-10 flex items-center justify-center bg-indigo-100 text-indigo-700 font-black rounded-xl text-lg flex-shrink-0">${idx + 1}</span>
+                    <span class="w-12 h-12 flex items-center justify-center bg-indigo-100 text-indigo-700 font-black rounded-xl text-xl flex-shrink-0">${idx + 1}</span>
                     <div>
                         <p class="font-bold text-slate-800 text-lg leading-snug">${q.q}</p>
-                        ${q.type === 'mcc' ? '<span class="text-xs font-black text-purple-700 bg-purple-100 px-3 py-1 rounded-md mt-3 inline-block uppercase tracking-wider"><i class="fas fa-check-double"></i> Pilih lebih dari satu jawaban</span>' : ''}
+                        ${q.type === 'mcc' ? '<span class="text-xs font-black text-purple-700 bg-purple-100 px-3 py-1.5 rounded-md mt-3 inline-block uppercase tracking-wider"><i class="fas fa-check-double"></i> Pilih lebih dari satu jawaban</span>' : ''}
                     </div>
                 </div>
-                <div class="space-y-3 pl-0 md:pl-14">${optsHtml}</div>
+                <div class="space-y-3 pl-0 md:pl-16">${optsHtml}</div>
             </div>
         `;
     }).join('');
@@ -557,9 +610,9 @@ function renderFinalTest() {
         const isLulus = state.finalScore >= 70;
         scoreAlert = `
             <div class="p-8 rounded-3xl mb-10 text-center shadow-lg border-2 ${isLulus ? 'bg-emerald-50 border-emerald-400 shadow-emerald-100' : 'bg-red-50 border-red-400 shadow-red-100'} slide-up">
-                <i class="fas ${isLulus ? 'fa-award text-emerald-500' : 'fa-times-circle text-red-500'} text-5xl mb-4"></i>
-                <h3 class="text-3xl font-black ${isLulus ? 'text-emerald-800' : 'text-red-800'}">Skor Akhir: ${state.finalScore} / 100</h3>
-                <p class="mt-3 text-lg font-bold ${isLulus ? 'text-emerald-600' : 'text-red-600'}">${isLulus ? 'Luar biasa! Sertifikat telah terbuka.' : 'Belum mencapai KKM (70). Evaluasi kembali.'}</p>
+                <i class="fas ${isLulus ? 'fa-award text-emerald-500' : 'fa-times-circle text-red-500'} text-6xl mb-5"></i>
+                <h3 class="text-4xl font-black ${isLulus ? 'text-emerald-800' : 'text-red-800'}">Skor Akhir: ${state.finalScore} / 100</h3>
+                <p class="mt-4 text-xl font-bold ${isLulus ? 'text-emerald-600' : 'text-red-600'}">${isLulus ? 'Luar biasa! Sertifikat telah terbuka.' : 'Belum mencapai KKM (70). Evaluasi kembali jawaban Anda.'}</p>
             </div>
         `;
     }
@@ -567,12 +620,12 @@ function renderFinalTest() {
     return `
         <div class="space-y-6 fade-in">
             <div class="text-center pb-8 border-b border-slate-200">
-                <h2 class="text-4xl font-extrabold text-slate-800 tracking-tight">Tes Akhir (HOTS)</h2>
-                <p class="text-slate-500 text-lg mt-3 font-medium">20 Studi Kasus SD: Pilihan Ganda & Ganda Kompleks.</p>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-800 tracking-tight">Tes Akhir (HOTS)</h2>
+                <p class="text-slate-500 text-xl mt-4 font-medium">20 Studi Kasus SD: Pilihan Ganda & Ganda Kompleks.</p>
             </div>
             ${scoreAlert}
-            <div class="mt-8">${qsHtml}</div>
-            ${!submitted ? `<button onclick="submitFinalTest()" class="w-full mt-10 bg-slate-900 hover:bg-black text-white font-bold py-5 rounded-2xl text-xl shadow-2xl transition-all flex justify-center gap-3 items-center">Kirim Tes Akhir <i class="fas fa-paper-plane"></i></button>` : ''}
+            <div class="mt-10">${qsHtml}</div>
+            ${!submitted ? `<button onclick="submitFinalTest()" class="w-full mt-10 bg-slate-900 hover:bg-black text-white font-bold py-6 rounded-2xl text-2xl shadow-2xl transition-all flex justify-center gap-3 items-center">Kirim Tes Akhir <i class="fas fa-paper-plane"></i></button>` : ''}
         </div>
     `;
 }
@@ -662,11 +715,9 @@ function render() {
             </div>
         </div>
     `;
-    
-    // Scroll to top when view changes
-    window.scrollTo(0, 0);
 }
 
+// LOGIC UTILITIES
 function changeView(viewId) {
     state.tempAnswers = {}; 
     if(viewId === 'activity') {
@@ -674,9 +725,12 @@ function changeView(viewId) {
     }
     state.currentView = viewId;
     render();
+    window.scrollTo(0, 0);
 }
 
-// ... existing code (setTempAnswer, submitMateri, savePlan, setTempAnswerFinalMC, setTempAnswerFinalMCC, submitFinalTest) ...
+function setTempAnswer(qIdx, optIdx) {
+    state.tempAnswers[qIdx] = optIdx;
+    render();
 }
 
 function submitMateri(id) {
@@ -697,6 +751,65 @@ function submitMateri(id) {
     state.scores[id] = correct * 10;
     render();
     window.scrollTo(0, document.body.scrollHeight);
+}
+
+// Activity logic
+function setActivityAnswer(qIdx, optIdx) {
+    state.activityQuest.tempAnswers[qIdx] = optIdx;
+    render();
+}
+
+function submitActivityLevel(lvl) {
+    const actData = activityData[lvl - 1];
+    
+    for (let i = 0; i < 10; i++) {
+        if (state.activityQuest.tempAnswers[i] === undefined) {
+            showToast("Harap selesaikan seluruh 10 soal di level ini!", "error");
+            return;
+        }
+    }
+
+    let correct = 0;
+    actData.q.forEach((q, idx) => {
+        if (state.activityQuest.tempAnswers[idx] === q.c) correct++;
+    });
+
+    const score = correct * 10;
+    state.activityQuest.scores[`l${lvl}`] = score;
+    
+    let gTotal = 0;
+    for(let i=1; i<=5; i++) {
+        gTotal += (state.activityQuest.scores[`l${i}`] || 0);
+    }
+    state.activityQuest.totalPoints = gTotal;
+    
+    if (score >= 80) {
+        showToast(`Hebat! Level ${lvl} Selesai dengan nilai ${score}.`, 'success');
+        if (lvl < 5 && state.activityQuest.currentLevel === lvl) {
+            state.activityQuest.currentLevel = lvl + 1;
+            state.activityQuest.tempAnswers = {}; 
+        }
+    } else {
+        showToast(`Nilai ${score}. Butuh 80 untuk lulus level ini.`, 'error');
+    }
+    render();
+    window.scrollTo(0,0);
+}
+
+function retryActivity(lvl) {
+    state.activityQuest.scores[`l${lvl}`] = null;
+    state.activityQuest.tempAnswers = {};
+    render();
+}
+
+function changeQuestLevel(lvl) {
+    if (lvl > 1 && (state.activityQuest.scores[`l${lvl-1}`] === null || state.activityQuest.scores[`l${lvl-1}`] < 80)) {
+        showToast("Selesaikan level sebelumnya dengan nilai minimal 80!", "warning");
+        return;
+    }
+    state.activityQuest.currentLevel = lvl;
+    state.activityQuest.tempAnswers = {}; 
+    render();
 }
 
 // Plan Logic
@@ -757,7 +870,7 @@ function submitFinalTest() {
     window.scrollTo(0,0);
 }
 
-// Init
+// Inisialisasi Aplikasi
 render();
 </script>
 </body>
