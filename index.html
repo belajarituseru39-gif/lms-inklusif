@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS Pendidikan Inklusif SD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        .slide-up { animation: slideUp 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+            .no-print { display: none !important; }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div id="toast-container" class="fixed top-4 right-4 z-[60] flex flex-col gap-2"></div>
+    <div id="app" class="min-h-screen"></div>
+
+<script>
+const materiData = [
+  {
+    id: 'm1', title: 'Miskonsepsi Pendidikan Inklusif', video: 'https://www.youtube.com/embed/38NeC5oHhw4',
+    questions: [
+      { q: "1. (C1) Apa definisi paling mendasar dari pendidikan inklusif?", a: ["Menyatukan semua anak di satu kelas tanpa terkecuali", "Memberikan akses pendidikan berkualitas untuk semua anak termasuk ABK di sekolah reguler", "Membangun sekolah khusus untuk anak berkebutuhan khusus", "Memisahkan anak yang pintar dan kurang pintar"], c: 1 },
+      { q: "2. (C2) Mengapa anggapan 'Pendidikan inklusif hanya untuk anak disabilitas' merupakan sebuah miskonsepsi?", a: ["Karena pendidikan inklusif juga untuk anak berprestasi", "Karena pendidikan inklusif merangkul keberagaman semua anak (sosial, ekonomi, budaya, dll)", "Karena SLB lebih baik", "Karena guru reguler tidak bisa mengajar ABK"], c: 1 },
+      { q: "3. (C3) Jika ada siswa dari kelompok minoritas yang sering diabaikan, bagaimana pendekatan inklusif diterapkan?", a: ["Menyuruhnya bergaul sendiri", "Membuat kelompok belajar yang heterogen dan memfasilitasi interaksi positif", "Memindahkannya ke sekolah lain", "Mengelompokkannya dengan yang minoritas saja"], c: 1 },
+      { q: "4. (C4) Sebuah sekolah menolak ABK dengan alasan tidak memiliki guru PLB. Analisislah miskonsepsi dari pernyataan tersebut!", a: ["Sekolah inklusif memang harus berisi guru PLB semua", "Guru reguler bisa dan berhak mengajar ABK melalui pelatihan dan adaptasi", "Alasan tersebut benar dan bisa dibenarkan secara hukum", "ABK memang seharusnya di SLB saja"], c: 1 },
+      { q: "5. (C5) Evaluasilah pernyataan ini: 'Menyamaratakan standar nilai untuk semua siswa adalah bentuk keadilan pendidikan'.", a: ["Benar, agar tidak ada diskriminasi", "Salah, keadilan dalam inklusi adalah memberikan standar sesuai kemampuan dan kebutuhan individu", "Benar, agar ujian lebih mudah dinilai", "Salah, standar tidak perlu ada sama sekali"], c: 1 },
+      { q: "6. (C6) Rancanglah argumen pembuka untuk meyakinkan orang tua yang khawatir anaknya sekelas dengan ABK!", a: ["Anak bapak/ibu harus belajar toleransi, suka tidak suka.", "Keberagaman di kelas justru mengajarkan empati, kolaborasi, dan kecakapan sosial yang krusial untuk masa depan semua anak.", "Tenang saja, ABK tidak akan mengganggu anak bapak/ibu.", "Kita coba dulu sebulan, jika buruk kita keluarkan ABK-nya."], c: 1 },
+      { q: "7. (C1) Miskonsepsi sering menyamakan pendidikan inklusif dengan...", a: ["Pendidikan segregasi", "Pendidikan integrasi tanpa penyesuaian", "Pendidikan jarak jauh", "Pendidikan non-formal"], c: 1 },
+      { q: "8. (C2) Jelaskan perbedaan antara integrasi dan inklusi!", a: ["Integrasi menyuruh anak menyesuaikan sistem, inklusi mengubah sistem untuk menyesuaikan anak", "Integrasi dan inklusi sama saja", "Inklusi untuk SLB, integrasi untuk sekolah reguler", "Integrasi mengubah sistem, inklusi membiarkan sistem"], c: 0 },
+      { q: "9. (C3) Saat siswa merasa materi terlalu sulit, guru inklusif akan...", a: ["Menyuruh siswa belajar lebih keras", "Memberi remedial terus menerus", "Melakukan modifikasi bahan ajar dan metode penyampaian", "Mengabaikan karena yang lain sudah paham"], c: 2 },
+      { q: "10. (C4) Mengapa melabeli anak 'nakal' atau 'bodoh' merusak prinsip inklusif?", a: ["Karena melanggar tata tertib", "Karena menutup ruang identifikasi potensi dan akar masalah sebenarnya", "Karena membuat anak marah", "Karena orang tua bisa menuntut"], c: 1 }
+    ]
+  },
+  {
+    id: 'm2', title: 'Pengertian Pendidikan Inklusif', video: 'https://www.youtube.com/embed/aXW32kyJ48c',
+    questions: [
+      { q: "1. (C1) Berdasarkan filosofinya, pendidikan inklusif didasarkan pada...", a: ["Hak Asasi Manusia", "Rasa kasihan", "Aturan dinas", "Tren globalisasi"], c: 0 },
+      { q: "2. (C2) Apa makna dari 'Education for All' dalam konteks inklusif?", a: ["Pendidikan hanya untuk warga negara asli", "Setiap individu berhak mendapat layanan pendidikan tanpa diskriminasi", "Pendidikan gratis di semua jenjang", "Sekolah harus menerima semua guru"], c: 1 },
+      { q: "3. (C3) Terapkan konsep inklusif pada kegiatan ekstrakurikuler Pramuka!", a: ["Hanya siswa normal yang wajib ikut", "Memodifikasi kegiatan agar semua siswa dengan berbagai kondisi bisa berpartisipasi", "Membuat grup Pramuka khusus ABK", "Meniadakan Pramuka jika ada ABK"], c: 1 },
+      { q: "4. (C4) Mengapa lingkungan fisik sekolah (aksesibilitas) menjadi indikator penting pendidikan inklusif?", a: ["Untuk pamer fasilitas", "Karena lingkungan fisik mencerminkan apakah sekolah siap menyambut keberagaman mobilitas siswa", "Agar sekolah terlihat modern", "Karena diwajibkan oleh komite"], c: 1 },
+      { q: "5. (C5) Nilailah keefektifan sistem 'pull-out' (menarik siswa ABK keluar kelas reguler sebentar untuk sesi khusus).", a: ["Sangat buruk karena memisahkan siswa", "Efektif jika dilakukan sesuai kebutuhan spesifik tanpa menghilangkan hak sosialisasi utama di kelas", "Sangat baik agar kelas reguler tenang", "Sama sekali tidak boleh dilakukan"], c: 1 },
+      { q: "6. (C6) Buatlah satu visi kelas yang mencerminkan pengertian pendidikan inklusif!", a: ["Menjadi kelas dengan nilai rata-rata tertinggi se-provinsi", "Ruang aman dimana setiap anak diakui, dihargai, dan berkembang sesuai potensinya", "Kelas elit yang mencetak juara olimpiade", "Menciptakan siswa yang disiplin mutlak"], c: 1 },
+      { q: "7. (C1) Pendidikan inklusif di Indonesia dijamin oleh undang-undang, salah satunya adalah...", a: ["Permendiknas No. 70 Tahun 2009", "UU Lalu Lintas", "UU Hak Cipta", "UU Perdagangan"], c: 0 },
+      { q: "8. (C2) Keberagaman yang diakomodasi dalam pendidikan inklusif mencakup...", a: ["Hanya kecacatan fisik", "Fisik, intelektual, sosial, emosional, linguistik, dan kondisi lainnya", "Hanya kecerdasan di atas rata-rata", "Hanya perbedaan agama"], c: 1 },
+      { q: "9. (C3) Bagaimana guru menunjukkan pemahaman inklusif dalam menyusun tempat duduk?", a: ["Berdasarkan tinggi badan saja", "Memisahkan ABK di belakang", "Menyusun secara dinamis untuk mendukung peer-tutoring dan aksesibilitas", "Berdasarkan abjad mutlak"], c: 2 },
+      { q: "10. (C4) Analisis peran teman sebaya dalam konsep pendidikan inklusif!", a: ["Sebagai saingan belajar", "Sebagai tutor sebaya, model sosial, dan pendukung empati", "Tidak memiliki peran khusus", "Sebagai pengganti guru"], c: 1 }
+    ]
+  },
+  {
+    id: 'm3', title: 'Prinsip Adaptasi Pendidikan Inklusif', video: 'https://www.youtube.com/embed/qbr25qjm3wk',
+    questions: [
+      { q: "1. (C1) Apa yang dimaksud dengan adaptasi kurikulum?", a: ["Mengganti seluruh kurikulum nasional", "Melakukan penyesuaian isi, metode, alat, dan evaluasi pembelajaran sesuai kebutuhan siswa", "Meringkas buku teks menjadi tipis", "Mengubah nama mata pelajaran"], c: 1 },
+      { q: "2. (C2) Jelaskan perbedaan Modifikasi dan Akomodasi!", a: ["Akomodasi mengubah cara belajar, Modifikasi mengubah standar capaian", "Keduanya sama persis", "Modifikasi untuk guru, akomodasi untuk siswa", "Akomodasi menurunkan nilai, modifikasi menaikkan nilai"], c: 0 },
+      { q: "3. (C3) Siswa tunanetra kesulitan membaca papan tulis. Adaptasi apa yang tepat?", a: ["Menyuruhnya duduk di depan", "Memberikan materi dalam format audio atau Braille dan mendeskripsikan gambar secara lisan", "Membebaskannya dari tugas membaca", "Menyuruh siswa lain membacakannya setiap saat"], c: 1 },
+      { q: "4. (C4) Mengapa IEP (Individualized Education Program / PPI) penting sebagai prinsip adaptasi?", a: ["Karena terlihat profesional", "Karena memastikan tujuan dan intervensi disesuaikan dengan asesmen spesifik anak", "Karena kepala sekolah menyukainya", "Untuk memperbanyak administrasi guru"], c: 1 },
+      { q: "5. (C5) Evaluasi kebijakan sekolah yang memberikan soal ujian matematika yang sama persis kepada siswa diskalkulia.", a: ["Sangat adil", "Tidak adil, sekolah tidak melakukan adaptasi evaluasi yang esensial", "Sudah benar agar siswa terbiasa", "Hanya kurang waktu tambahan saja"], c: 1 },
+      { q: "6. (C6) Rancang satu bentuk adaptasi metode pengajaran untuk anak dengan ADHD!", a: ["Menyuruh duduk diam 2 jam", "Memberikan instruksi singkat, jeda gerak (brain break), dan tugas yang dibagi kecil-kecil (chunking)", "Memberikan hukuman jika bergerak", "Menempatkannya di luar kelas"], c: 1 },
+      { q: "7. (C1) Penyesuaian waktu ujian termasuk dalam adaptasi...", a: ["Materi", "Lingkungan fisik", "Akomodasi proses/evaluasi", "Modifikasi kurikulum"], c: 2 },
+      { q: "8. (C2) Universal Design for Learning (UDL) bertujuan untuk...", a: ["Merancang pembelajaran yang dapat diakses oleh sebanyak mungkin siswa sejak awal", "Membuat gedung ramah kursi roda", "Merancang seragam sekolah universal", "Membuat satu buku untuk seluruh dunia"], c: 0 },
+      { q: "9. (C3) Saat ada anak lamban belajar (slow learner), guru mengadaptasi dengan...", a: ["Menurunkan KKM kelas", "Memberikan pengulangan materi, visualisasi ekstra, dan waktu lebih lama", "Meninggalkan anak tersebut", "Menyuruhnya membaca sendiri"], c: 1 },
+      { q: "10. (C4) Analisis mengapa kolaborasi dengan Guru Pembimbing Khusus (GPK) merupakan bagian dari prinsip adaptasi!", a: ["Agar guru reguler bisa bersantai", "GPK memberikan insight ahli untuk menyusun strategi dan adaptasi yang paling tepat sasaran", "Karena diwajibkan saja", "Untuk menghabiskan anggaran"], c: 1 }
+    ]
+  },
+  {
+    id: 'm4', title: 'Mengenal Jenis Kebutuhan Khusus', video: 'https://www.youtube.com/embed/mrFgFukr5BY',
+    questions: [
+      { q: "1. (C1) Peserta didik yang memiliki hambatan dalam fungsi penglihatan disebut...", a: ["Tunanetra", "Tunarungu", "Tunagrahita", "Tunalaras"], c: 0 },
+      { q: "2. (C2) Jelaskan perbedaan mendasar antara anak Tuli dan Kurang Pendengaran (Hard of Hearing)!", a: ["Tuli tidak bisa melihat, kurang pendengaran bisa", "Tuli kehilangan fungsi dengar secara signifikan, kurang pendengaran masih memiliki sisa pendengaran yang fungsional", "Keduanya sama saja", "Tuli bisa bicara lancar, kurang pendengaran tidak"], c: 1 },
+      { q: "3. (C3) Siswa cerdas lisan, namun sering membalik huruf 'b' dan 'd'. Ini mengindikasikan...", a: ["Diskalkulia", "Disgrafia", "Disleksia", "Autisme"], c: 2 },
+      { q: "4. (C4) Mengapa Autistic Spectrum Disorder (ASD) disebut sebagai 'spektrum'?", a: ["Karena hanya muncul pada anak laki-laki", "Karena gejala, karakteristik, dan tingkat keparahannya sangat bervariasi", "Karena menyukai warna pelangi", "Karena bisa disembuhkan"], c: 1 },
+      { q: "5. (C5) Nilailah: 'Anak Tunagrahita tidak perlu diajarkan akademis'.", a: ["Benar, hanya butuh keterampilan hidup", "Salah, tetap berpotensi akademis fungsional dengan adaptasi", "Benar, agar guru tidak lelah", "Salah, dipaksa belajar standar reguler"], c: 1 },
+      { q: "6. (C6) Rancang tugas sesuai untuk anak ADHD!", a: ["Membaca 2 jam henti", "Mengerjakan 100 soal mandiri", "Tugas dibagi kecil (chunking), instruksi singkat, dan brain break", "Menyuruhnya duduk di pojok"], c: 2 },
+      { q: "7. (C1) Gangguan ketidakmampuan mengendalikan emosi secara ekstrem disebut...", a: ["Tunalaras", "Tunadaksa", "Tunanetra", "CIBI"], c: 0 },
+      { q: "8. (C2) Mengapa Cerdas Istimewa Bakat Istimewa (CIBI) dikategorikan ABK?", a: ["Karena nakal", "Karena butuh layanan di atas rata-rata agar potensinya optimal (mencegah underachiever)", "Karena sering sakit", "Karena tidak butuh guru"], c: 1 },
+      { q: "9. (C3) Langkah untuk siswa Lamban Belajar (Slow Learner)?", a: ["Menurunkan kelas", "Mengabaikannya", "Pengulangan materi, waktu ekstra, media konkret", "Memarahinya"], c: 2 },
+      { q: "10. (C4) Beda Kesulitan Belajar Spesifik (SLD) dengan Tunagrahita?", a: ["Sama saja", "Tunagrahita IQ rata-rata, SLD di bawah", "Tunagrahita hambatan intelektual umum, SLD IQ normal namun terhambat area spesifik", "SLD gangguan fisik"], c: 2 }
+    ]
+  }
+];
+
+const finalTestHOTS = [
+  { id: 1, type: 'mc', q: "Budi (Siswa Kelas 1 SD) sering tantrum, menutup telinga, dan bersembunyi di bawah meja saat bel istirahat berbunyi nyaring. Dari analisis sensorik, adaptasi lingkungan (akomodasi) apa yang paling tepat diberikan oleh guru kelas?", a: ["Mengunci pintu kelas rapat-rapat", "Menyediakan earmuff (pelindung telinga) atau 'Safe Space' di pojok kelas saat bel berbunyi", "Menyuruh siswa lain menertawakannya", "Memaksa Budi berdiri di dekat pengeras suara agar terbiasa"], c: 1 },
+  { id: 2, type: 'mc', q: "Siti (Kelas 3 SD) kesulitan membaca nyaring. Ia sering membalik huruf 'p' menjadi 'q' pada buku tematiknya, namun sangat cerdas dalam sesi tanya jawab lisan tentang IPA. Modifikasi evaluasi apa yang paling inklusif untuk Siti?", a: ["Memberikan ujian lisan atau menggunakan aplikasi text-to-speech daripada ujian membaca panjang", "Menghukum Siti menyalin buku tematik 10 kali", "Menurunkan Siti ke kelas 2 SD", "Memberi nilai 0 pada semua mata pelajaran"], c: 1 },
+  { id: 3, type: 'mc', q: "Dalam pelajaran IPS kelas 5 SD tentang letak pulau di Indonesia, terdapat satu siswa tunanetra (buta total). Media pembelajaran apa (Substitusi) yang wajib disediakan guru agar ia mencapai tujuan pembelajaran yang sama?", a: ["Peta dinding ukuran besar", "Video YouTube tentang pulau di Indonesia", "Peta timbul (3D/taktil) dari bubur kertas atau puzzle kayu berpola", "Menyuruhnya membayangkan pulau-pulau tersebut"], c: 2 },
+  { id: 4, type: 'mc', q: "Dinda (Kelas 2 SD) didiagnosis ADHD. Ia tidak bisa duduk diam lebih dari 10 menit saat pelajaran Matematika dan sering mengganggu temannya. Strategi instruksional 'Chunking' yang bisa diterapkan guru adalah...", a: ["Meminta Dinda mengerjakan 50 soal sekaligus di papan tulis", "Memecah tugas menjadi 5 soal, diselingi tugas bergerak (misal: mengambil kapur), lalu lanjut 5 soal lagi", "Menempatkan meja Dinda di luar kelas", "Meniadakan jam matematika untuk Dinda"], c: 1 },
+  { id: 5, type: 'mc', q: "Edo adalah siswa lamban belajar (slow learner) di kelas 4 SD. Saat ada tugas proyek kelompok Biologi (membuat ekosistem), peran kolaboratif apa yang paling menghargai potensinya tanpa membuatnya minder?", a: ["Menjadikannya ketua kelompok yang presentasi teori berat", "Dilarang ikut kerja kelompok agar nilainya tidak membebani teman", "Diberikan peran fungsional terarah, misalnya bagian menempel dan menata miniatur hewan sesuai instruksi teman", "Diisolasi di perpustakaan"], c: 2 },
+  { id: 6, type: 'mc', q: "Rina (Kelas 6 SD) adalah siswa tunarungu yang memakai alat bantu dengar. Saat ujian praktik Bahasa Indonesia (Mendengarkan Cerita Rakyat), akomodasi apa yang paling tepat sesuai UDL?", a: ["Guru membacakan cerita dari belakang kelas dengan suara lantang", "Guru mengganti format audio menjadi teks tertulis (teks cerita rakyat) atau video dengan terjemahan isyarat/teks", "Rina dikeluarkan dari ujian Bahasa Indonesia", "Rina dipaksa menebak suara kaset tape"], c: 1 },
+  { id: 7, type: 'mc', q: "Kevin (Kelas 1 SD) mengalami cerebral palsy ringan yang menyebabkan motorik halus tangannya kaku. Ia kesulitan menyalin tulisan dari papan tulis ke buku tegak bersambung. Akomodasi esensial untuk Kevin adalah...", a: ["Membiarkannya tertinggal cacatan setiap hari", "Menurunkan nilai sikap karena tulisan jelek", "Mengizinkan penggunaan tablet/laptop untuk mengetik, atau guru memberikan fotokopi catatan", "Mewajibkannya menulis sampai tangannya sakit"], c: 2 },
+  { id: 8, type: 'mc', q: "Lani (Kelas 3 SD) adalah siswa Cerdas Istimewa (CIBI). Ia sering tidur di kelas karena materi perkalian dasar sudah ia kuasai sejak TK. Adaptasi kurikulum (Eskalasi) apa yang tepat?", a: ["Menaikkannya langsung ke SMP", "Memberikan hukuman lari di lapangan karena tidak menghargai guru", "Memberikan proyek pengayaan mandiri, misalnya menghitung anggaran belanja kantin sekolah menggunakan perkalian susun", "Menyuruhnya mengerjakan soal yang sama berulang-ulang 100 kali"], c: 2 },
+  { id: 9, type: 'mc', q: "Doni (Kelas 2 SD) memiliki hambatan intelektual (Tunagrahita). Saat teman-temannya belajar konsep pecahan campuran, Doni sama sekali tidak paham. Langkah modifikasi (Omisi/Simplikasi) yang tepat adalah...", a: ["Mengabaikan Doni asalkan ia diam", "Menyederhanakan materi untuk Doni menjadi pengenalan konsep mata uang fungsional (misal: uang 2000 dan 1000)", "Memaksa Doni menghafal rumus pecahan", "Membocorkan kunci jawaban ujian kepadanya"], c: 1 },
+  { id: 10, type: 'mc', q: "Sila (Kelas 5 SD) mengalami Selective Mutism (membisu secara selektif karena cemas ekstrem) dan tidak mau presentasi lisan di depan kelas. Guru PPKn yang inklusif akan melakukan...", a: ["Memberi nilai 0 karena tidak berani tampil", "Memaksa Sila berdiri di depan sampai ia mau bicara", "Mengizinkan Sila merekam presentasinya di rumah (audio/video) atau menggunakan alat peraga visual tanpa suara di kelas", "Mengeluarkannya dari kelompok PPKn"], c: 2 },
+  { id: 11, type: 'mcc', q: "(Pilih Lebih Dari Satu) Penerapan Universal Design for Learning (UDL) yang tepat pada materi Siklus Air kelas 4 SD meliputi...", options: ["Menyajikan materi hanya lewat buku teks hitam putih", "Menampilkan video animasi siklus air dengan teks terjemahan", "Menyediakan opsi asesmen: membuat diorama, poster, atau presentasi", "Menghukum siswa yang terlambat"], a: [1, 2] },
+  { id: 12, type: 'mcc', q: "(Pilih Lebih Dari Satu) Manfaat menerapkan strategi Tutor Sebaya di kelas 3 SD yang memiliki siswa ABK adalah...", options: ["Membebaskan guru dari tugas mengajar sepenuhnya", "Mengembangkan empati dan rasa tanggung jawab siswa reguler (tutor)", "Meningkatkan kepercayaan diri dan pemahaman sosial siswa ABK (tutee)", "Membuat siswa pintar menjadi sombong"], a: [1, 2] },
+  { id: 13, type: 'mcc', q: "(Pilih Lebih Dari Satu) Dokumen Program Pembelajaran Individual (PPI) untuk anak SD WAJIB memuat...", options: ["Level kemampuan akademik dan motorik anak saat ini (baseline)", "Target tujuan pembelajaran jangka pendek dan panjang yang spesifik", "Daftar lengkap harga seragam sekolah", "Rincian adaptasi materi dan evaluasi yang disepakati bersama orang tua"], a: [0, 1, 3] },
+  { id: 14, type: 'mcc', q: "(Pilih Lebih Dari Satu) Dalam modifikasi kurikulum IPS kelas 5 untuk siswa dengan hambatan kognitif ringan, langkah yang sah dilakukan guru adalah...", options: ["Menurunkan kompleksitas Indikator Pencapaian Kompetensi (Simplikasi)", "Mengganti materi yang terlalu abstrak dengan materi kecakapan hidup (Substitusi)", "Memaksa menggunakan soal Ujian Nasional yang sama persis (Duplikasi kaku)", "Membuang indikator yang sama sekali tidak relevan dengan potensi anak (Omisi)"], a: [0, 1, 3] },
+  { id: 15, type: 'mcc', q: "(Pilih Lebih Dari Satu) Akomodasi lingkungan fisik di sebuah SD yang mendukung mobilitas siswa pengguna kursi roda adalah...", options: ["Pembuatan bidang miring (ramp) dengan kemiringan yang landai", "Pintu kelas yang diperlebar dan tanpa undakan tinggi", "Meletakkan pojok baca di lantai 2 yang hanya bisa diakses tangga", "Pegangan rambat (handrail) di toilet khusus"], a: [0, 1, 3] },
+  { id: 16, type: 'mc', q: "Terjadi konflik di jam istirahat. Seorang siswa kelas 1 SD reguler merebut mainan siswa dengan Down Syndrome hingga menangis. Sebagai guru inklusif, tindakan mediasi yang tepat adalah...", a: ["Membela siswa Down Syndrome membabi buta karena ia ABK", "Menyalahkan siswa reguler karena nakal", "Menjadi fasilitator yang netral, memvalidasi emosi keduanya, dan menuntun mereka mempraktikkan cara meminta izin yang benar", "Menyita mainan tersebut dan dibuang"], c: 2 },
+  { id: 17, type: 'mc', q: "Beberapa orang tua murid kelas 6 SD protes ke kepala sekolah. Mereka khawatir konsentrasi anak mereka terganggu menjelang Ujian Sekolah karena ada satu anak Autis di kelas. Solusi sistemik sekolah yang tepat adalah...", a: ["Mengeluarkan anak Autis tersebut demi nama baik sekolah", "Menyelenggarakan 'Parenting Class' terbuka untuk mengedukasi orang tua tentang toleransi, jaminan hak belajar, dan manfaat kelas inklusif", "Memarahi orang tua murid yang protes", "Menyembunyikan anak autis di UKS selama setahun"], c: 1 },
+  { id: 18, type: 'mc', q: "Pak Anton, guru kelas 2 SD, merasa kelelahan (burnout) karena harus menghadapi tantrum siswa setiap hari sendirian. Tindakan kolaboratif profesional yang sebaiknya ia lakukan...", a: ["Memukul meja dengan keras agar anak diam", "Membangun sistem 'Time-Out/Tag-Team' dengan rekan guru sebelah kelas atau GPK, serta rutin berdiskusi dengan orang tua murid", "Meninggalkan kelas dan pulang", "Menulis status keluhan di Facebook"], c: 1 },
+  { id: 19, type: 'mc', q: "Dalam penulisan Rapor Naratif untuk anak Autis kelas 1 SD yang nilai akademisnya masih sangat rendah namun baru saja menunjukkan kemajuan bisa kontak mata 5 detik, guru menuliskan...", a: ["Siswa mendapat nilai E karena tidak paham pelajaran sama sekali", "Siswa sangat menyusahkan guru di kelas", "Apresiasi positif: 'Ananda menunjukkan kemajuan luar biasa pada capaian komunikasi non-verbal dasar, menjadi fondasi sosial yang baik.'", "Dikosongkan saja"], c: 2 },
+  { id: 20, type: 'mcc', q: "(Pilih Lebih Dari Satu) Asesmen adaptif untuk pelajaran PJOK (Olahraga) di SD bagi siswa Tunadaksa (kelumpuhan kaki) materi Atletik Lari adalah...", options: ["Memberi nilai 0 otomatis karena fisiknya tidak mampu", "Mengganti asesmen dengan aktivitas yang mengukur daya tahan bagian tubuh atas (misal: lempar tangkap bola modifikasi)", "Melibatkan siswa sebagai pencatat skor atau juri garis (partisipasi fungsional)", "Memaksa siswa ikut berlari sejauh kemampuannya walau sakit"], a: [1, 2] }
+];
+
+// DATA AKTIVITAS MANDIRI AUTO-GRADING
+const activityData = [
+  {
+    level: 1, title: 'Mitos Atau Fakta?',
+    desc: 'Pilih apakah pernyataan berikut merupakan Mitos atau Fakta dalam pendidikan inklusif! (Nilai 10 Poin per soal)',
+    q: [
+      { text: "1. Pendidikan inklusif berarti semua anak PDBK wajib diajarkan kurikulum reguler yang sama persis tanpa terkecuali.", a: ["Mitos", "Fakta"], c: 0 },
+      { text: "2. Anak lamban belajar (slow learner) adalah identik dan sama dengan anak tunagrahita.", a: ["Mitos", "Fakta"], c: 0 },
+      { text: "3. Guru SD kelas reguler bisa mengajar ABK asalkan mau melakukan modifikasi dan akomodasi belajar.", a: ["Mitos", "Fakta"], c: 1 },
+      { text: "4. Tujuan utama inklusi adalah agar anak ABK pintar secara akademik menyamai anak reguler.", a: ["Mitos", "Fakta"], c: 0 },
+      { text: "5. Memberikan standar nilai yang berbeda untuk ABK adalah bentuk keadilan yang sesuai kebutuhan (equity).", a: ["Mitos", "Fakta"], c: 1 },
+      { text: "6. Sekolah yang membuat bidang miring (ramp) sudah pasti sepenuhnya menjadi sekolah inklusif.", a: ["Mitos", "Fakta"], c: 0 },
+      { text: "7. Keberadaan ABK di kelas mengajarkan kolaborasi dan empati sosial yang tinggi pada anak reguler.", a: ["Mitos", "Fakta"], c: 1 },
+      { text: "8. Pendidikan inklusif berfokus pada upaya mengubah sistem dan lingkungan, bukan mengubah kondisi anak.", a: ["Mitos", "Fakta"], c: 1 },
+      { text: "9. Anak Cerdas Istimewa (CIBI) tidak butuh layanan inklusi karena mereka sudah pintar.", a: ["Mitos", "Fakta"], c: 0 },
+      { text: "10. Diagnosis medis mutlak diperlukan sebelum guru memberikan penyesuaian tempat duduk.", a: ["Mitos", "Fakta"], c: 0 }
+    ]
+  },
+  {
+    level: 2, title: 'Detektif Hambatan Belajar',
+    desc: 'Analisislah indikasi hambatan dari studi kasus murid SD berikut tanpa terburu-buru melabeli medis!',
+    q: [
+      { text: "1. Andi kelas 2 SD sering mondar-mandir, tak bisa duduk lebih dari 5 menit, dan menyela pembicaraan guru. Indikasi ini sering terkait dengan...", a: ["Autisme", "Hambatan Intelektual", "ADHD (Hiperaktifitas)"], c: 2 },
+      { text: "2. Budi sangat pintar secara lisan, namun saat membaca tulisan di papan, ia sering membalik huruf 'b' menjadi 'd' atau mengeja tersendat. Indikasi hambatan...", a: ["Kesulitan Belajar (Disleksia)", "Tunarungu", "Tunagrahita"], c: 0 },
+      { text: "3. Rina sering menunduk, menghindari kontak mata, dan menangis histeris jika tempat duduknya dipindah tanpa pemberitahuan. Indikasi ini terkait karakteristik...", a: ["Tunalaras", "Gangguan Spektrum Autisme", "Lamban Belajar"], c: 1 },
+      { text: "4. Dika kesulitan memahami konsep uang pecahan dan sering salah dalam operasi hitung sederhana padahal sudah kelas 5 SD. Indikasi hambatan...", a: ["Diskalkulia", "Disgrafia", "Tunanetra"], c: 0 },
+      { text: "5. Lani dipanggil dari arah belakang dengan suara normal namun tidak merespon. Ia baru menoleh saat ditepuk atau jika dipanggil dengan sangat keras. Indikasi hambatan...", a: ["Kurang Pendengaran (Hard of Hearing)", "Tunalaras", "Hiperaktif"], c: 0 },
+      { text: "6. Siswa sering marah-marah melempar barang ke teman tanpa sebab jelas dan sulit mematuhi norma kelas secara terus-menerus. Indikasi hambatan...", a: ["Tunalaras", "Tunagrahita", "Disleksia"], c: 0 },
+      { text: "7. IQ Doni di bawah rata-rata (70). Ia sangat lambat menyerap materi tematik dan butuh pengulangan belasan kali serta instruksi yang disederhanakan. Indikasi hambatan...", a: ["Tunagrahita", "Autisme", "Tunadaksa"], c: 0 },
+      { text: "8. Tangan kanan Siti agak kaku dan sulit digunakan untuk menggenggam pensil (cerebral palsy ringan), namun bicaranya lancar. Indikasi hambatan...", a: ["Tunadaksa", "Tunanetra", "Tunagrahita"], c: 0 },
+      { text: "9. Dina selalu membaca dengan posisi buku yang sangat dekat (menempel ke hidung) dan sering salah menyalin di papan. Indikasi hambatan...", a: ["Hambatan Intelektual", "Low Vision", "Disgrafia"], c: 1 },
+      { text: "10. Edo butuh waktu lebih lama memahami materi dibanding teman sebaya, IQ-nya sekitar 85 (borderline). Ia tidak cacat intelektual tapi bukan rata-rata. Indikasi...", a: ["Slow Learner (Lamban Belajar)", "Tunalaras", "Cerdas Istimewa"], c: 0 }
+    ]
+  },
+  {
+    level: 3, title: 'Audit Sekolah Inklusif',
+    desc: 'Audit kondisi lingkungan berikut. Tentukan apakah praktik ini termasuk "Praktik Inklusif" atau "Hambatan Inklusif".',
+    q: [
+      { text: "1. Guru memindahkan pojok baca ke lantai agar mudah diakses murid berkursi roda.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 1 },
+      { text: "2. Kepala sekolah membuat aturan wajib menggunakan tangga dan tidak ada jalan miring (ramp).", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 0 },
+      { text: "3. Guru BK mengadakan kampanye toleransi dan anti-bullying melibatkan seluruh siswa reguler.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 1 },
+      { text: "4. Guru marah dan menyuruh anak autis keluar karena dianggap mengganggu saat tantrum.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 0 },
+      { text: "5. Sekolah menyediakan ruang 'Safe Space' atau area tenang bagi anak yang butuh menenangkan diri.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 1 },
+      { text: "6. Evaluasi ujian disamaratakan dalam satu lembar teks penuh untuk semua anak, termasuk yang disleksia.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 0 },
+      { text: "7. Guru menyajikan materi menggunakan media visual, lisan, dan kinestetik secara bersamaan (UDL).", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 1 },
+      { text: "8. Orang tua ABK tidak pernah dilibatkan dalam rapat penyusunan tujuan pembelajaran anak.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 0 },
+      { text: "9. Guru reguler berkolaborasi secara berkala dengan Guru Pembimbing Khusus/Psikolog puskesmas.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 1 },
+      { text: "10. Label/stigma dari teman sebaya dibiarkan tanpa adanya mediasi dari fasilitator.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 0 }
+    ]
+  },
+  {
+    level: 4, title: 'Tantangan Adaptasi Kurikulum',
+    desc: 'Tentukan jenis adaptasi pembelajaran yang tepat dari setiap skenario di bawah ini!',
+    q: [
+      { text: "1. Siswa reguler mengerjakan soal operasi hitung pecahan. Siswa Tunagrahita diberi soal penjumlahan dasar 1-10. (Menurunkan tingkat kesulitan).", a: ["Simplikasi", "Duplikasi", "Omisi"], c: 0 },
+      { text: "2. Siswa reguler menyimak audio pidato. Siswa Tunarungu diberikan teks transkrip pidato untuk dibaca secara tertulis. (Mengganti bentuk materi setara).", a: ["Substitusi", "Duplikasi", "Eskalasi"], c: 0 },
+      { text: "3. Anak CIBI (Cerdas Istimewa) diberi proyek riset mandiri tentang fotosintesis sementara temannya masih menghafal dasar daun. (Meningkatkan kesulitan).", a: ["Eskalasi", "Omisi", "Duplikasi"], c: 0 },
+      { text: "4. Siswa Tunadaksa menggunakan format ujian soal pilihan ganda standar nasional yang sama persis seperti siswa reguler lainnya. (Menyajikan sama persis).", a: ["Duplikasi", "Substitusi", "Simplikasi"], c: 0 },
+      { text: "5. Siswa buta total dibebaskan sama sekali dari praktik mewarnai gradasi cat air karena mustahil dan tidak fungsional untuknya. (Menghilangkan sebagian indikator).", a: ["Substitusi", "Duplikasi", "Omisi"], c: 2 },
+      { text: "6. Soal ulangan IPS 10 nomor diringkas hanya menjadi 5 nomor untuk anak Slow Learner. (Menyederhanakan kuantitas).", a: ["Eskalasi", "Simplikasi", "Omisi"], c: 1 },
+      { text: "7. Siswa disleksia ujian menggunakan aplikasi pembaca layar (text-to-speech) dibanding membaca kertas lembar ujian standar. (Mengganti alat ujian).", a: ["Omisi", "Duplikasi", "Substitusi"], c: 2 },
+      { text: "8. Karena ada siswa tunadaksa, asesmen atletik lari jarak jauh ditiadakan baginya dan diubah menjadi lempar bola sejauh-jauhnya dengan tangan.", a: ["Simplikasi", "Substitusi", "Duplikasi"], c: 1 },
+      { text: "9. Anak dengan Autism Spectrum Disorder mengerjakan soal matematika level kelasnya, tetapi dengan font dan jarak spasi yang diperlebar tanpa merubah isi soal.", a: ["Duplikasi (Akomodasi format)", "Omisi", "Eskalasi"], c: 0 },
+      { text: "10. Materi merakit sirkuit listrik yang sangat kompleks dibuang (tidak diajarkan) pada siswa tunagrahita berat dan fokus pada pengenalan bahaya listrik. (Dihilangkan indikator kompleksnya).", a: ["Eskalasi", "Duplikasi", "Omisi"], c: 2 }
+    ]
+  },
+  {
+    level: 5, title: 'Inclusion Design Challenge',
+    desc: 'Kasus "Bintang": Siswa kelas 3 SD. Hambatan: Low Vision (penglihatan sisa 20%) & Lamban Belajar. Potensi: Ia memiliki memori pendengaran luar biasa dan suka bernyanyi lagu daerah. Pilih langkah desain inklusif terbaik!',
+    q: [
+      { text: "1. (Lingkungan): Posisi tempat duduk terbaik untuk Bintang di kelas adalah...", a: ["Paling belakang agar tidak ketahuan lambat", "Di barisan depan, dekat guru dan dekat sumber cahaya natural", "Di ruang UKS sendirian"], c: 1 },
+      { text: "2. (Media): Media baca yang tepat untuk menstimulasi penglihatannya tanpa membuatnya kelelahan...", a: ["Buku teks ukuran standar SD", "Aplikasi audio penuh tanpa buku fisik sama sekali", "Buku teks dengan huruf besar (Large Print) tebal dan kontras tinggi"], c: 2 },
+      { text: "3. (Instruksional): Karena Bintang lamban belajar, saat memberi instruksi guru harus...", a: ["Mengulang materi, menggunakan instruksi singkat bertahap (chunking)", "Memberikan hafalan satu buku sekaligus", "Berbicara dengan sangat cepat"], c: 0 },
+      { text: "4. (Pendekatan): Memanfaatkan potensinya, cara guru mengajarkan materi IPA (Daur Air) kepada Bintang...", a: ["Menyuruhnya membaca teks Daur Air", "Menggubah materi Daur Air menjadi lirik lagu agar mudah ia hafal dengan nyanyian", "Memintanya menggambar di kertas"], c: 1 },
+      { text: "5. (Evaluasi/Asesmen): Bentuk ujian semester Bahasa Indonesia yang berkeadilan (equity) untuknya...", a: ["Ujian tertulis panjang 2 jam", "Ujian Lisan atau tanya jawab langsung dengan guru", "Diberikan nilai KKM saja tanpa diuji"], c: 1 },
+      { text: "6. (Sosial): Jika teman kelas mengejek kacamata tebal Bintang, tindakan guru...", a: ["Menghukum fisik yang mengejek", "Menjadikan ini momen edukasi empati di kelas dan melibatkan teman menjadi 'buddy' pendamping jalan", "Menyuruh Bintang melepas kacamatanya"], c: 1 },
+      { text: "7. (Lingkungan Mikro): Adaptasi papan tulis agar tulisan guru terlihat oleh Bintang...", a: ["Menggunakan kapur kuning pucat", "Menggunakan spidol hitam tebal (marker) dengan ukuran tulisan diperbesar", "Tidak perlu menulis di papan"], c: 1 },
+      { text: "8. (Kurikulum): Adaptasi yang dilakukan untuk target hafalan UUD 1945 Bintang...", a: ["Omisi: dihapus total karena dia slow learner", "Duplikasi: dituntut hafal persis reguler", "Simplikasi: menyederhanakan panjang hafalan menjadi makna dasar pasalnya saja"], c: 2 },
+      { text: "9. (Fisik Sekolah): Adaptasi infrastruktur agar Bintang tidak sering tersandung...", a: ["Memberikan jalur berpemandu (guiding block) di selasar atau memastikan barang tidak menghalangi lorong", "Menyediakan tongkat listrik", "Menguncinya di kelas"], c: 0 },
+      { text: "10. (Kolaborasi): Melibatkan orang tua Bintang dalam PPI yang paling esensial adalah...", a: ["Menarik iuran biaya tambahan", "Menyepakati agar orang tua mengulangi lagu hafalan materi IPA tersebut di rumah", "Menyuruh orang tua menggantikan guru"], c: 1 }
+    ]
+  }
+];
+
+const state = {
+    user: { name: '', school: '', isLogged: false },
+    currentView: 'login', // login, dashboard, m1, m2, m3, m4, activity, plan, final, cert
+    scores: { m1: null, m2: null, m3: null, m4: null },
+    
+    // Aktivitas Mandiri - Auto Grading State
+    activityQuest: {
+        currentLevel: 1,
+        totalPoints: 0,
+        scores: { l1: null, l2: null, l3: null, l4: null, l5: null },
+        tempAnswers: {}
+    },
+    
+    actionPlan: '',
+    finalScore: null,
+    tempAnswers: {} 
+};
+
+// --- RENDER UTILITY ---
+const appDiv = document.getElementById('app');
+
+function showToast(msg, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    const bgClass = type === 'error' ? 'bg-red-500' : (type === 'warning' ? 'bg-amber-500' : 'bg-emerald-500');
+    const icon = type === 'error' ? 'fa-exclamation-circle' : (type === 'warning' ? 'fa-info-circle' : 'fa-check-circle');
+    
+    toast.className = `${bgClass} text-white px-5 py-4 rounded-xl shadow-2xl font-medium flex items-center gap-3 slide-up`;
+    toast.innerHTML = `<i class="fas ${icon} text-xl"></i> <span>${msg}</span>`;
+    
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-20px)';
+        toast.style.transition = 'all 0.4s ease';
+        setTimeout(() => toast.remove(), 400);
+    }, 3500);
+}
+
+function updateState() {
+    render();
+}
+
+// ... existing code (renderLogin, renderSidebar, renderDashboard, renderMateri) ...
+
+function renderMateri(id) {
+    const data = materiData.find(m => m.id === id);
+    const score = state.scores[id];
+    const submitted = score !== null;
+
+    let qsHtml = data.questions.map((q, idx) => {
+        let optsHtml = q.a.map((opt, optIdx) => {
+            const isChecked = state.tempAnswers[idx] === optIdx;
+            let bgClass = isChecked ? 'bg-indigo-50 border-indigo-400 ring-1 ring-indigo-400' : 'bg-white border-slate-200 hover:bg-slate-50';
+            if (submitted) {
+                if (q.c === optIdx) bgClass = 'bg-emerald-50 border-emerald-400 ring-1 ring-emerald-400 font-semibold text-emerald-900';
+                else if (isChecked && q.c !== optIdx) bgClass = 'bg-red-50 border-red-300 text-red-800';
+            }
+
+            return `
+                <label class="flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all ${bgClass}">
+                    <input type="radio" name="materi_${id}_q${idx}" class="mt-1 w-4 h-4 text-indigo-600 focus:ring-indigo-500" ${submitted ? 'disabled' : ''} ${isChecked ? 'checked' : ''} onchange="setTempAnswer(${idx}, ${optIdx})">
+                    <span class="text-sm md:text-base leading-snug flex-1">${opt}</span>
+                </label>
+            `;
+        }).join('');
+
+        return `
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm mb-4">
+                <p class="font-bold text-slate-700 mb-4 text-lg">${q.q}</p>
+                <div class="space-y-3">${optsHtml}</div>
+            </div>
+        `;
+    }).join('');
+
+    let scoreAlert = '';
+    if (submitted) {
+        const alertClass = score >= 70 ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-800 border-amber-200';
+        const icon = score >= 70 ? 'fa-star text-emerald-500' : 'fa-exclamation-triangle text-amber-500';
+        scoreAlert = `
+            <div class="p-6 rounded-2xl mb-8 flex flex-col items-center justify-center border-2 border-dashed ${alertClass}">
+                <i class="fas ${icon} text-4xl mb-2"></i>
+                <h3 class="text-2xl font-black">Nilai Kuis: ${score} / 100</h3>
+            </div>`;
+    }
+
+    return `
+        <div class="space-y-8 fade-in">
+            <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">${data.title}</h2>
+            <div class="relative w-full bg-slate-900 rounded-3xl overflow-hidden shadow-xl" style="padding-top: 56.25%;">
+                <iframe class="absolute top-0 left-0 w-full h-full" src="${data.video}" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="mt-10 pt-10 border-t border-slate-200">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl"><i class="fas fa-pencil-alt"></i></div>
+                    <h3 class="text-2xl font-bold text-slate-800">Uji Pemahaman</h3>
+                </div>
+                ${scoreAlert}
+                <div class="space-y-6">${qsHtml}</div>
+                ${!submitted ? `<button onclick="submitMateri('${id}')" class="w-full mt-8 bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-2xl text-lg shadow-lg transition-all flex justify-center gap-2 items-center">Kumpulkan Jawaban <i class="fas fa-paper-plane"></i></button>` : ''}
+            </div>
+        </div>
+    `;
+}
+
+function renderActivity() {
+    const st = state.activityQuest;
+    const l = st.currentLevel;
+    const actData = activityData[l - 1]; // Array index 0-4
+    
+    // Header & Nav Bar Level 1-5
+    let navHtml = [1, 2, 3, 4, 5].map(lvl => {
+        const isEval = st.scores[`l${lvl}`] !== null;
+        const score = isEval ? st.scores[`l${lvl}`] : 0;
+        const isUnlocked = lvl === 1 || (st.scores[`l${lvl-1}`] >= 80);
+        
+        let btnCls = `w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg transition-all `;
+        if(l === lvl) btnCls += 'ring-4 ring-indigo-200 shadow-md ';
+        if(!isUnlocked) btnCls += 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200';
+        else if(score >= 80) btnCls += 'bg-emerald-500 text-white shadow-emerald-200 shadow-lg';
+        else btnCls += 'bg-indigo-600 text-white cursor-pointer shadow-indigo-200 shadow-lg';
+        
+        const content = !isUnlocked ? '<i class="fas fa-lock text-sm"></i>' : (score >= 80 ? lvl : lvl);
+        return `<button class="${btnCls}" ${!isUnlocked ? 'disabled' : `onclick="changeQuestLevel(${lvl})"`}>${content}</button>`;
+    }).join('');
+
+    // Evaluator status
+    const levelScore = st.scores[`l${l}`];
+    const isEvaluated = levelScore !== null;
+    
+    // Render the MCQs
+    let questionsHtml = actData.q.map((q, idx) => {
+        let optionsHtml = q.a.map((opt, optIdx) => {
+            const isChecked = st.tempAnswers[idx] === optIdx;
+            let bgCls = isChecked ? 'bg-indigo-50 border-indigo-400 ring-1 ring-indigo-400' : 'bg-white border-slate-200 hover:bg-slate-50';
+            
+            if (isEvaluated) {
+                if (q.c === optIdx) bgCls = 'bg-emerald-50 border-emerald-400 ring-1 ring-emerald-400 font-semibold text-emerald-900';
+                else if (isChecked && q.c !== optIdx) bgCls = 'bg-red-50 border-red-300 text-red-800';
+            }
+
+            return `
+                <label class="flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all ${bgCls}">
+                    <input type="radio" name="act_${l}_q${idx}" class="mt-1 w-4 h-4 text-indigo-600 focus:ring-indigo-500" 
+                        ${isEvaluated ? 'disabled' : ''} ${isChecked ? 'checked' : ''} 
+                        onchange="setActivityAnswer(${idx}, ${optIdx})">
+                    <span class="text-sm md:text-base leading-snug flex-1">${opt}</span>
+                </label>
+            `;
+        }).join('');
+
+        return `
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm mb-4">
+                <p class="font-bold text-slate-700 mb-4 text-lg">${q.text}</p>
+                <div class="grid md:grid-cols-2 gap-3">${optionsHtml}</div>
+            </div>
+        `;
+    }).join('');
+
+    // Determine Predicate
+    let predText = '';
+    if(st.totalPoints >= 450) predText = '🏆 Champion of Inclusive Education';
+    else if(st.totalPoints >= 400) predText = '🥇 Inclusive Education Expert';
+    else if(st.totalPoints >= 350) predText = '🥈 Inclusive Education Practitioner';
+    else if(st.totalPoints >= 300) predText = '🥉 Inclusive Education Explorer';
+    else predText = 'Perlu Pendampingan Lanjutan';
+
+    return `
+        <div class="space-y-8 fade-in relative">
+            <div class="flex flex-col md:flex-row items-center justify-between border-b border-slate-200 pb-6">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Aktivitas Mandiri</h2>
+                    <p class="text-slate-500 font-medium mt-1">Sistem Penilaian Otomatis - Selesaikan Misi Anda</p>
+                </div>
+                <div class="mt-4 md:mt-0 flex flex-col items-end">
+                    <div class="flex gap-3">${navHtml}</div>
+                    <div class="mt-3 text-sm font-bold bg-slate-100 py-1.5 px-3 rounded-lg text-slate-600 border border-slate-200">
+                        Total Poin: <span class="text-indigo-600 text-lg">${st.totalPoints}/500</span>
+                    </div>
+                </div>
+            </div>
+            
+            ${st.totalPoints > 0 ? `<div class="bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200 p-4 rounded-xl text-center font-bold text-amber-800 shadow-sm">Pencapaian Saat Ini: ${predText}</div>` : ''}
+
+            <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold text-indigo-900 mb-2">Level ${l}: ${actData.title}</h3>
+                    <p class="text-slate-600 font-medium">${actData.desc}</p>
+                </div>
+                
+                ${isEvaluated ? `
+                    <div class="mb-8 p-6 bg-emerald-50 border-2 border-emerald-400 border-dashed rounded-2xl text-center">
+                        <h3 class="text-2xl font-black text-emerald-800">Skor Level ${l}: ${levelScore} / 100</h3>
+                        <p class="text-emerald-600 font-medium mt-2">Evaluasi otomatis telah selesai. Review jawaban Anda.</p>
+                        ${levelScore < 80 ? `<button onclick="retryActivity(${l})" class="mt-4 px-6 py-2 bg-white border-2 border-emerald-300 text-emerald-700 rounded-xl text-sm font-bold hover:bg-emerald-100 transition-all shadow-sm">Coba Ulang Level ${l}</button>` : ''}
+                    </div>
+                ` : ''}
+
+                <div class="space-y-6">${questionsHtml}</div>
+                
+                ${!isEvaluated ? `
+                    <button onclick="submitActivityLevel(${l})" class="w-full mt-10 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex justify-center gap-2 items-center text-lg">
+                        Kirim & Evaluasi Sistem <i class="fas fa-cogs"></i>
+                    </button>
+                ` : ''}
+            </div>
+        </div>
+    `;
+}
+
+// System Auto-Grading Logic
+function setActivityAnswer(qIdx, optIdx) {
+    state.activityQuest.tempAnswers[qIdx] = optIdx;
+    render();
+}
+
+function submitActivityLevel(lvl) {
+    const actData = activityData[lvl - 1];
+    
+    // Check if 10 questions answered
+    for (let i = 0; i < 10; i++) {
+        if (state.activityQuest.tempAnswers[i] === undefined) {
+            showToast("Harap selesaikan seluruh 10 soal di level ini!", "error");
+            return;
+        }
+    }
+
+    let correct = 0;
+    actData.q.forEach((q, idx) => {
+        if (state.activityQuest.tempAnswers[idx] === q.c) correct++;
+    });
+
+    const score = correct * 10; // 10 points each
+    state.activityQuest.scores[`l${lvl}`] = score;
+    
+    // Recalculate total points
+    let gTotal = 0;
+    for(let i=1; i<=5; i++) {
+        gTotal += (state.activityQuest.scores[`l${i}`] || 0);
+    }
+    state.activityQuest.totalPoints = gTotal;
+    
+    if (score >= 80) {
+        showToast(`Hebat! Level ${lvl} Selesai dengan nilai ${score}.`, 'success');
+        if (lvl < 5 && state.activityQuest.currentLevel === lvl) {
+            state.activityQuest.currentLevel = lvl + 1; // move to next unlocked
+            state.activityQuest.tempAnswers = {}; // reset for next
+        }
+    } else {
+        showToast(`Nilai ${score}. Butuh 80 untuk lulus level ini. Coba perbaiki!`, 'error');
+    }
+    render();
+    window.scrollTo(0,0);
+}
+
+function retryActivity(lvl) {
+    state.activityQuest.scores[`l${lvl}`] = null;
+    state.activityQuest.tempAnswers = {};
+    render();
+}
+
+function changeQuestLevel(lvl) {
+    if (lvl > 1 && (state.activityQuest.scores[`l${lvl-1}`] === null || state.activityQuest.scores[`l${lvl-1}`] < 80)) {
+        showToast("Selesaikan level sebelumnya dengan nilai minimal 80!", "warning");
+        return;
+    }
+    state.activityQuest.currentLevel = lvl;
+    state.activityQuest.tempAnswers = {}; // Clear temp if changing level midway
+    
+    // If revisiting a completed level, prefill answers visually? 
+    // We didn't save historical answers per level, just the final score, so revisiting will clear visually.
+    render();
+}
+
+function renderPlan() {
+    return `
+        <div class="space-y-6 fade-in">
+            <h2 class="text-3xl font-extrabold text-slate-800 flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl"><i class="fas fa-rocket"></i></div> Rencana Aksi</h2>
+            <p class="text-slate-600 font-medium">Setelah menyelesaikan Aktivitas Mandiri, tulislah langkah nyata yang akan Anda lakukan di kelas/sekolah Anda.</p>
+            <div class="bg-amber-50 p-5 border-l-4 border-amber-400 rounded-r-xl shadow-sm">
+                <p class="text-sm text-amber-800 font-bold mb-2">Panduan Penulisan:</p>
+                <ul class="text-sm text-amber-800 list-disc pl-5 space-y-1">
+                    <li>Fokus pada adaptasi fisik kelas atau adaptasi metode mengajar.</li>
+                    <li>Sebutkan kolaborasi yang akan Anda jalin (Tripusat Pendidikan).</li>
+                </ul>
+            </div>
+            <textarea id="planText" class="w-full h-64 p-5 border border-slate-300 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none resize-none text-slate-700 shadow-inner font-medium text-lg leading-relaxed" placeholder="Ketik rencana aksi Anda di sini...">${state.actionPlan}</textarea>
+            <button onclick="savePlan()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all w-full md:w-auto text-lg">Simpan Komitmen</button>
+        </div>
+    `;
+}
+
+function renderFinalTest() {
+    const submitted = state.finalScore !== null;
+
+    let qsHtml = finalTestHOTS.map((q, idx) => {
+        let optsHtml = '';
+        
+        if (q.type === 'mcc') {
+            optsHtml = q.options.map((opt, optIdx) => {
+                const userAnsArr = state.tempAnswers[q.id] || [];
+                const isChecked = userAnsArr.includes(optIdx);
+                const isCorrectAns = q.a.includes(optIdx);
+                
+                let bgClass = isChecked ? 'bg-purple-50 border-purple-300 ring-1 ring-purple-300' : 'bg-white border-slate-200 hover:bg-slate-50';
+                if (submitted) {
+                    if (isCorrectAns) bgClass = 'bg-emerald-50 border-emerald-400 font-bold text-emerald-900 ring-1 ring-emerald-400';
+                    else if (isChecked && !isCorrectAns) bgClass = 'bg-red-50 border-red-300 text-red-800';
+                }
+
+                return `
+                    <label class="flex items-start gap-4 p-4 rounded-xl border cursor-pointer transition-all ${bgClass}">
+                        <input type="checkbox" ${submitted ? 'disabled' : ''} ${isChecked ? 'checked' : ''} onchange="setTempAnswerFinalMCC(${q.id}, ${optIdx}, this.checked)" class="mt-1 h-5 w-5 rounded text-purple-600 focus:ring-purple-500">
+                        <span class="text-sm md:text-base flex-1 leading-relaxed">${opt}</span>
+                    </label>
+                `;
+            }).join('');
+        } else {
+            optsHtml = q.a.map((opt, optIdx) => {
+                const isChecked = state.tempAnswers[q.id] === optIdx;
+                let bgClass = isChecked ? 'bg-indigo-50 border-indigo-400 ring-1 ring-indigo-400' : 'bg-white border-slate-200 hover:bg-slate-50';
+                if (submitted) {
+                    if (q.c === optIdx) bgClass = 'bg-emerald-50 border-emerald-400 font-bold text-emerald-900 ring-1 ring-emerald-400';
+                    else if (isChecked && q.c !== optIdx) bgClass = 'bg-red-50 border-red-300 text-red-800';
+                }
+
+                return `
+                    <label class="flex items-start gap-4 p-4 rounded-xl border cursor-pointer transition-all ${bgClass}">
+                        <input type="radio" name="final_${q.id}" ${submitted ? 'disabled' : ''} ${isChecked ? 'checked' : ''} onchange="setTempAnswerFinalMC(${q.id}, ${optIdx})" class="mt-1 h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base flex-1 leading-relaxed">${opt}</span>
+                    </label>
+                `;
+            }).join('');
+        }
+
+        return `
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-6">
+                <div class="flex gap-4 items-start mb-6">
+                    <span class="w-10 h-10 flex items-center justify-center bg-indigo-100 text-indigo-700 font-black rounded-xl text-lg flex-shrink-0">${idx + 1}</span>
+                    <div>
+                        <p class="font-bold text-slate-800 text-lg leading-snug">${q.q}</p>
+                        ${q.type === 'mcc' ? '<span class="text-xs font-black text-purple-700 bg-purple-100 px-3 py-1 rounded-md mt-3 inline-block uppercase tracking-wider"><i class="fas fa-check-double"></i> Pilih lebih dari satu jawaban</span>' : ''}
+                    </div>
+                </div>
+                <div class="space-y-3 pl-0 md:pl-14">${optsHtml}</div>
+            </div>
+        `;
+    }).join('');
+
+    let scoreAlert = '';
+    if (submitted) {
+        const isLulus = state.finalScore >= 70;
+        scoreAlert = `
+            <div class="p-8 rounded-3xl mb-10 text-center shadow-lg border-2 ${isLulus ? 'bg-emerald-50 border-emerald-400 shadow-emerald-100' : 'bg-red-50 border-red-400 shadow-red-100'} slide-up">
+                <i class="fas ${isLulus ? 'fa-award text-emerald-500' : 'fa-times-circle text-red-500'} text-5xl mb-4"></i>
+                <h3 class="text-3xl font-black ${isLulus ? 'text-emerald-800' : 'text-red-800'}">Skor Akhir: ${state.finalScore} / 100</h3>
+                <p class="mt-3 text-lg font-bold ${isLulus ? 'text-emerald-600' : 'text-red-600'}">${isLulus ? 'Luar biasa! Sertifikat telah terbuka.' : 'Belum mencapai KKM (70). Evaluasi kembali.'}</p>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="space-y-6 fade-in">
+            <div class="text-center pb-8 border-b border-slate-200">
+                <h2 class="text-4xl font-extrabold text-slate-800 tracking-tight">Tes Akhir (HOTS)</h2>
+                <p class="text-slate-500 text-lg mt-3 font-medium">20 Studi Kasus SD: Pilihan Ganda & Ganda Kompleks.</p>
+            </div>
+            ${scoreAlert}
+            <div class="mt-8">${qsHtml}</div>
+            ${!submitted ? `<button onclick="submitFinalTest()" class="w-full mt-10 bg-slate-900 hover:bg-black text-white font-bold py-5 rounded-2xl text-xl shadow-2xl transition-all flex justify-center gap-3 items-center">Kirim Tes Akhir <i class="fas fa-paper-plane"></i></button>` : ''}
+        </div>
+    `;
+}
+
+function renderCertificate() {
+    const date = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+    let predText = 'Perlu Pendampingan Lanjutan';
+    const st = state.activityQuest;
+    if(st.totalPoints >= 450) predText = 'Champion of Inclusive Education';
+    else if(st.totalPoints >= 400) predText = 'Inclusive Education Expert';
+    else if(st.totalPoints >= 350) predText = 'Inclusive Education Practitioner';
+    else if(st.totalPoints >= 300) predText = 'Inclusive Education Explorer';
+
+    return `
+        <div class="space-y-6 fade-in relative">
+            <div class="flex justify-between items-center mb-6 no-print">
+                <h2 class="text-3xl font-extrabold text-slate-800">Sertifikat</h2>
+                <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl shadow-lg shadow-indigo-200 font-bold flex items-center gap-2 transition-all">
+                    <i class="fas fa-print"></i> Cetak PDF
+                </button>
+            </div>
+            <div id="print-area" class="p-4 border-[16px] border-double border-indigo-900 bg-white relative overflow-hidden" style="min-height: 700px;">
+                <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-indigo-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 -translate-x-1/2 -translate-y-1/2"></div>
+                <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-amber-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 translate-x-1/2 translate-y-1/2"></div>
+                <div class="relative z-10 flex flex-col items-center justify-center text-center p-12 h-full">
+                    <i class="fas fa-award text-7xl text-amber-400 mb-8 drop-shadow-md"></i>
+                    <h1 class="text-5xl md:text-6xl font-serif font-black text-indigo-950 tracking-widest mb-4 uppercase">Sertifikat</h1>
+                    <p class="text-xl text-slate-500 font-medium tracking-widest uppercase mb-10">Pendidikan Inklusif SD</p>
+                    <p class="text-lg text-slate-600 italic mb-4">Diberikan dengan penuh rasa bangga kepada:</p>
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-800 border-b-4 border-slate-200 pb-3 mb-3 inline-block px-12 capitalize">${state.user.name}</h2>
+                    <p class="text-2xl text-indigo-600 font-bold mb-10">${state.user.school}</p>
+                    <p class="max-w-3xl text-slate-700 text-xl leading-relaxed mb-8">
+                        Telah menuntaskan <b>Tes Akhir (Skor: ${state.finalScore})</b> dan Aktivitas Mandiri dengan Predikat:<br>
+                        <span class="font-black text-amber-600 text-3xl block mt-4 px-6 py-2 bg-amber-50 rounded-lg inline-block border border-amber-200">${predText}</span>
+                    </p>
+                    <p class="font-bold text-slate-500 text-lg italic">"Wujudkan Pendidikan Bermutu Untuk Semua"</p>
+                    <div class="w-full flex justify-between px-16 mt-16 pt-8 border-t-2 border-slate-100">
+                        <div class="text-center">
+                            <p class="text-slate-500 italic mb-6">Diberikan pada tanggal</p>
+                            <p class="font-bold text-slate-800 text-xl">${date}</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-slate-500 italic mb-6">Penyelenggara Pelatihan</p>
+                            <div class="w-48 h-1 bg-slate-800 mx-auto mb-2"></div>
+                            <p class="font-bold text-slate-800 text-xl">Direktur Program</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function render() {
+    if (!state.user.isLogged) {
+        appDiv.innerHTML = renderLogin();
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('inputName').value.trim();
+            const school = document.getElementById('inputSchool').value.trim();
+            if (name && school) {
+                state.user = { name, school, isLogged: true };
+                state.currentView = 'dashboard';
+                render();
+            } else {
+                showToast('Harap lengkapi form!', 'error');
+            }
+        });
+        return;
+    }
+
+    let mainContent = '';
+    if (state.currentView === 'dashboard') mainContent = renderDashboard();
+    else if (state.currentView.startsWith('m')) mainContent = renderMateri(state.currentView);
+    else if (state.currentView === 'activity') mainContent = renderActivity();
+    else if (state.currentView === 'plan') mainContent = renderPlan();
+    else if (state.currentView === 'final') mainContent = renderFinalTest();
+    else if (state.currentView === 'cert') mainContent = renderCertificate();
+
+    appDiv.innerHTML = `
+        <div class="flex flex-col md:flex-row w-full font-sans">
+            ${renderSidebar()}
+            <div class="flex-1 p-4 md:p-10 lg:px-16 lg:py-12 bg-slate-50 min-h-screen no-print">
+                <div class="max-w-5xl mx-auto mb-20">
+                    ${mainContent}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Scroll to top when view changes
+    window.scrollTo(0, 0);
+}
+
+function changeView(viewId) {
+    state.tempAnswers = {}; 
+    if(viewId === 'activity') {
+        state.activityQuest.tempAnswers = {}; 
+    }
+    state.currentView = viewId;
+    render();
+}
+
+// ... existing code (setTempAnswer, submitMateri, savePlan, setTempAnswerFinalMC, setTempAnswerFinalMCC, submitFinalTest) ...
+}
+
+function submitMateri(id) {
+    const data = materiData.find(m => m.id === id);
+    let correct = 0;
+    
+    for (let i = 0; i < 10; i++) {
+        if (state.tempAnswers[i] === undefined) {
+            showToast("Harap jawab semua pertanyaan!", "error");
+            return;
+        }
+    }
+
+    data.questions.forEach((q, idx) => {
+        if (state.tempAnswers[idx] === q.c) correct++;
+    });
+
+    state.scores[id] = correct * 10;
+    render();
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+// Plan Logic
+function savePlan() {
+    state.actionPlan = document.getElementById('planText').value;
+    showToast("Komitmen Rencana Aksi Disimpan!", "success");
+}
+
+// Final Test Logic
+function setTempAnswerFinalMC(qId, optIdx) {
+    state.tempAnswers[qId] = optIdx;
+    render();
+}
+
+function setTempAnswerFinalMCC(qId, optIdx, isChecked) {
+    if (!state.tempAnswers[qId]) state.tempAnswers[qId] = [];
+    if (isChecked) {
+        state.tempAnswers[qId].push(optIdx);
+    } else {
+        state.tempAnswers[qId] = state.tempAnswers[qId].filter(i => i !== optIdx);
+    }
+    render();
+}
+
+function submitFinalTest() {
+    let uncompleted = false;
+    finalTestHOTS.forEach(q => {
+        if (state.tempAnswers[q.id] === undefined || (Array.isArray(state.tempAnswers[q.id]) && state.tempAnswers[q.id].length === 0)) {
+            uncompleted = true;
+        }
+    });
+
+    if (uncompleted) {
+        showToast("Mohon jawab seluruh 20 studi kasus.", "warning");
+        return;
+    }
+
+    let correctCount = 0;
+    finalTestHOTS.forEach(q => {
+        const userAns = state.tempAnswers[q.id];
+        if (q.type === 'mc') {
+            if (userAns === q.c) correctCount++;
+        } else if (q.type === 'mcc') {
+            const correctSet = [...q.a].sort();
+            const userSet = [...userAns].sort();
+            if (JSON.stringify(correctSet) === JSON.stringify(userSet)) correctCount++;
+        }
+    });
+
+    state.finalScore = (correctCount / 20) * 100;
+    
+    if (state.finalScore >= 70) {
+        showToast(`LULUS! Skor Anda ${state.finalScore}. Sertifikat terbuka.`, "success");
+    } else {
+        showToast(`Skor: ${state.finalScore}. Butuh 70 untuk lulus.`, "error");
+    }
+    render();
+    window.scrollTo(0,0);
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
