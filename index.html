@@ -122,82 +122,82 @@ const finalTestHOTS = [
 const activityData = [
   {
     level: 1, title: 'Mitos Atau Fakta?',
-    desc: 'Pilih apakah pernyataan berikut merupakan Mitos atau Fakta dalam pendidikan inklusif! (Nilai 10 Poin per soal)',
+    desc: 'Berdasarkan konsep dasar dan miskonsepsi pendidikan khusus, tentukan apakah pernyataan berikut Mitos atau Fakta! (Nilai 10 Poin/soal)',
     q: [
-      { text: "1. Pendidikan inklusif berarti semua anak PDBK wajib diajarkan kurikulum reguler yang sama persis tanpa terkecuali.", a: ["Mitos", "Fakta"], c: 0 },
-      { text: "2. Anak lamban belajar (slow learner) adalah identik dan sama dengan anak tunagrahita.", a: ["Mitos", "Fakta"], c: 0 },
-      { text: "3. Guru SD kelas reguler bisa mengajar ABK asalkan mau melakukan modifikasi dan akomodasi belajar.", a: ["Mitos", "Fakta"], c: 1 },
-      { text: "4. Tujuan utama inklusi adalah agar anak ABK pintar secara akademik menyamai anak reguler.", a: ["Mitos", "Fakta"], c: 0 },
-      { text: "5. Memberikan standar nilai yang berbeda untuk ABK adalah bentuk keadilan yang sesuai kebutuhan (equity).", a: ["Mitos", "Fakta"], c: 1 },
-      { text: "6. Sekolah yang membuat bidang miring (ramp) sudah pasti sepenuhnya menjadi sekolah inklusif.", a: ["Mitos", "Fakta"], c: 0 },
-      { text: "7. Keberadaan ABK di kelas mengajarkan kolaborasi dan empati sosial yang tinggi pada anak reguler.", a: ["Mitos", "Fakta"], c: 1 },
-      { text: "8. Pendidikan inklusif berfokus pada upaya mengubah sistem dan lingkungan, bukan mengubah kondisi anak.", a: ["Mitos", "Fakta"], c: 1 },
-      { text: "9. Anak Cerdas Istimewa (CIBI) tidak butuh layanan inklusi karena mereka sudah pintar.", a: ["Mitos", "Fakta"], c: 0 },
-      { text: "10. Diagnosis medis mutlak diperlukan sebelum guru memberikan penyesuaian tempat duduk.", a: ["Mitos", "Fakta"], c: 0 }
+      { text: "1. Sekolah reguler diperbolehkan menolak PDBK jika tidak memiliki Guru Pembimbing Khusus (GPK) berlatar belakang PLB.", a: ["Mitos", "Fakta"], c: 0 },
+      { text: "2. Tujuan pendidikan inklusif adalah menyembuhkan disabilitas yang dialami oleh peserta didik.", a: ["Mitos", "Fakta"], c: 0 },
+      { text: "3. Guru kelas reguler dilarang memberikan diagnosis medis secara sepihak (misal: menyebut anak 'autis') tanpa rujukan ahli.", a: ["Mitos", "Fakta"], c: 1 },
+      { text: "4. Peserta didik yang memiliki kecerdasan dan bakat istimewa (CIBI) juga termasuk dalam kategori PDBK.", a: ["Mitos", "Fakta"], c: 1 },
+      { text: "5. Sekolah reguler dapat melatih guru menjadi GPK dengan menjadikan SLB sebagai pusat sumber belajar.", a: ["Mitos", "Fakta"], c: 1 },
+      { text: "6. Semua Peserta Didik Berkebutuhan Khusus (PDBK) sudah pasti memiliki hambatan intelektual secara kognitif.", a: ["Mitos", "Fakta"], c: 0 },
+      { text: "7. Kesuksesan PDBK sangat bergantung pada sinergi tripusat pendidikan (sekolah, keluarga, masyarakat).", a: ["Mitos", "Fakta"], c: 1 },
+      { text: "8. Tugas guru di kelas inklusif adalah melakukan observasi dan asesmen untuk mengidentifikasi 'hambatan belajar' anak.", a: ["Mitos", "Fakta"], c: 1 },
+      { text: "9. Melabeli anak dengan diagnosis medis oleh guru di sekolah sering kali berujung pada perlakuan salah atau olokan teman.", a: ["Mitos", "Fakta"], c: 1 },
+      { text: "10. PDBK hanya mencakup kondisi disabilitas permanen, tidak mencakup hambatan sementara (akibat faktor eksternal/trauma).", a: ["Mitos", "Fakta"], c: 0 }
     ]
   },
   {
     level: 2, title: 'Detektif Hambatan Belajar',
-    desc: 'Analisislah indikasi hambatan dari studi kasus murid SD berikut tanpa terburu-buru melabeli medis!',
+    desc: 'Identifikasi klasifikasi hambatan belajar berdasarkan karakteristik dari Peserta Didik Berkebutuhan Khusus (PDBK) berikut!',
     q: [
-      { text: "1. Andi kelas 2 SD sering mondar-mandir, tak bisa duduk lebih dari 5 menit, dan menyela pembicaraan guru. Indikasi ini sering terkait dengan...", a: ["Autisme", "Hambatan Intelektual", "ADHD (Hiperaktifitas)"], c: 2 },
-      { text: "2. Budi sangat pintar secara lisan, namun saat membaca tulisan di papan, ia sering membalik huruf 'b' menjadi 'd' atau mengeja tersendat. Indikasi hambatan...", a: ["Kesulitan Belajar (Disleksia)", "Tunarungu", "Tunagrahita"], c: 0 },
-      { text: "3. Rina sering menunduk, menghindari kontak mata, dan menangis histeris jika tempat duduknya dipindah tanpa pemberitahuan. Indikasi ini terkait karakteristik...", a: ["Tunalaras", "Gangguan Spektrum Autisme", "Lamban Belajar"], c: 1 },
-      { text: "4. Dika kesulitan memahami konsep uang pecahan dan sering salah dalam operasi hitung sederhana padahal sudah kelas 5 SD. Indikasi hambatan...", a: ["Diskalkulia", "Disgrafia", "Tunanetra"], c: 0 },
-      { text: "5. Lani dipanggil dari arah belakang dengan suara normal namun tidak merespon. Ia baru menoleh saat ditepuk atau jika dipanggil dengan sangat keras. Indikasi hambatan...", a: ["Kurang Pendengaran (Hard of Hearing)", "Tunalaras", "Hiperaktif"], c: 0 },
-      { text: "6. Siswa sering marah-marah melempar barang ke teman tanpa sebab jelas dan sulit mematuhi norma kelas secara terus-menerus. Indikasi hambatan...", a: ["Tunalaras", "Tunagrahita", "Disleksia"], c: 0 },
-      { text: "7. IQ Doni di bawah rata-rata (70). Ia sangat lambat menyerap materi tematik dan butuh pengulangan belasan kali serta instruksi yang disederhanakan. Indikasi hambatan...", a: ["Tunagrahita", "Autisme", "Tunadaksa"], c: 0 },
-      { text: "8. Tangan kanan Siti agak kaku dan sulit digunakan untuk menggenggam pensil (cerebral palsy ringan), namun bicaranya lancar. Indikasi hambatan...", a: ["Tunadaksa", "Tunanetra", "Tunagrahita"], c: 0 },
-      { text: "9. Dina selalu membaca dengan posisi buku yang sangat dekat (menempel ke hidung) dan sering salah menyalin di papan. Indikasi hambatan...", a: ["Hambatan Intelektual", "Low Vision", "Disgrafia"], c: 1 },
-      { text: "10. Edo butuh waktu lebih lama memahami materi dibanding teman sebaya, IQ-nya sekitar 85 (borderline). Ia tidak cacat intelektual tapi bukan rata-rata. Indikasi...", a: ["Slow Learner (Lamban Belajar)", "Tunalaras", "Cerdas Istimewa"], c: 0 }
+      { text: "1. Anak dengan IQ rata-rata namun mengalami kesulitan spesifik dalam membaca kata dan mengeja (disleksia) masuk klasifikasi...", a: ["Lamban Belajar", "Kesulitan Belajar Spesifik"], c: 1 },
+      { text: "2. Anak yang memiliki IQ 70-90 dan selalu membutuhkan waktu belajar lebih lama dibanding teman sebayanya disebut...", a: ["Lamban Belajar (Slow Learner)", "Hambatan Intelektual"], c: 0 },
+      { text: "3. Kehilangan fungsi fisik atau ketangkasan karena masalah pada otak atau otot (seperti cerebral palsy) termasuk dalam...", a: ["Hambatan Fisik Motorik", "Hambatan Majemuk"], c: 0 },
+      { text: "4. Anak yang memiliki perilaku interaksi sosial kaku dan ketidakmampuan membangun hubungan interpersonal (Autisme) termasuk...", a: ["Hambatan Emosi, Perilaku, Autisme & ADHD", "Kesulitan Belajar Spesifik"], c: 0 },
+      { text: "5. PDBK yang secara luar biasa cepat memahami materi dan butuh stimulasi kurikulum yang jauh lebih menantang...", a: ["Cerdas dan Bakat Istimewa (CIBI)", "Hambatan Intelektual"], c: 0 },
+      { text: "6. Kondisi murid mulai dari low vision (penglihatan lemah) hingga buta total diklasifikasikan ke dalam...", a: ["Hambatan Penglihatan", "Hambatan Pendengaran"], c: 0 },
+      { text: "7. Anak dengan IQ di bawah 70 secara persisten diklasifikasikan memiliki...", a: ["Hambatan Intelektual", "Lamban Belajar (Slow Learner)"], c: 0 },
+      { text: "8. Anak yang mengalami kesulitan parah dalam berkonsentrasi dan bergerak berlebihan secara konstan terindikasi...", a: ["ADHD", "Disleksia"], c: 0 },
+      { text: "9. Anak yang mengalami kerusakan alat pendengaran yang secara langsung menghambat komunikasi verbalnya termasuk...", a: ["Hambatan Penglihatan", "Hambatan Pendengaran"], c: 1 },
+      { text: "10. Murid yang memiliki lebih dari satu jenis hambatan secara bersamaan (misal: tunanetra sekaligus tunarungu) diklasifikasikan sebagai...", a: ["Hambatan Fisik Motorik", "Hambatan Majemuk (Cacat Ganda)"], c: 1 }
     ]
   },
   {
-    level: 3, title: 'Audit Sekolah Inklusif',
-    desc: 'Audit kondisi lingkungan berikut. Tentukan apakah praktik ini termasuk "Praktik Inklusif" atau "Hambatan Inklusif".',
+    level: 3, title: 'Prinsip Ekosistem Inklusif',
+    desc: 'Tentukan apakah praktik di bawah ini "Mendukung" atau "Menghambat" prinsip ekosistem inklusi dan Tripusat Pendidikan!',
     q: [
-      { text: "1. Guru memindahkan pojok baca ke lantai agar mudah diakses murid berkursi roda.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 1 },
-      { text: "2. Kepala sekolah membuat aturan wajib menggunakan tangga dan tidak ada jalan miring (ramp).", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 0 },
-      { text: "3. Guru BK mengadakan kampanye toleransi dan anti-bullying melibatkan seluruh siswa reguler.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 1 },
-      { text: "4. Guru marah dan menyuruh anak autis keluar karena dianggap mengganggu saat tantrum.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 0 },
-      { text: "5. Sekolah menyediakan ruang 'Safe Space' atau area tenang bagi anak yang butuh menenangkan diri.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 1 },
-      { text: "6. Evaluasi ujian disamaratakan dalam satu lembar teks penuh untuk semua anak, termasuk yang disleksia.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 0 },
-      { text: "7. Guru menyajikan materi menggunakan media visual, lisan, dan kinestetik secara bersamaan (UDL).", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 1 },
-      { text: "8. Orang tua ABK tidak pernah dilibatkan dalam rapat penyusunan tujuan pembelajaran anak.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 0 },
-      { text: "9. Guru reguler berkolaborasi secara berkala dengan Guru Pembimbing Khusus/Psikolog puskesmas.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 1 },
-      { text: "10. Label/stigma dari teman sebaya dibiarkan tanpa adanya mediasi dari fasilitator.", a: ["Hambatan Inklusif", "Praktik Inklusif"], c: 0 }
+      { text: "1. Sekolah reguler secara sepihak menolak pendaftaran anak pengguna kursi roda dengan alasan tidak punya guru GPK.", a: ["Mendukung", "Menghambat"], c: 1 },
+      { text: "2. Sekolah merangkul orang tua dan masyarakat sekitar sebagai bagian dari 'Tripusat Pendidikan' untuk mendukung program ABK.", a: ["Mendukung", "Menghambat"], c: 0 },
+      { text: "3. Guru memanggil seorang murid dengan sebutan/label medis 'si Autis' di depan murid-murid kelas reguler lainnya.", a: ["Mendukung", "Menghambat"], c: 1 },
+      { text: "4. SD reguler menjalin kerja sama dengan universitas (jurusan Pendidikan Luar Biasa) untuk melatih kemampuan guru-gurunya.", a: ["Mendukung", "Menghambat"], c: 0 },
+      { text: "5. Guru menyadari tugasnya memberikan layanan pembelajaran inklusif terbaik daripada mencoba 'menyembuhkan' disabilitas murid.", a: ["Mendukung", "Menghambat"], c: 0 },
+      { text: "6. Guru melakukan asesmen murni untuk mengidentifikasi 'hambatan belajar' siswa, bukan untuk memberi diagnosis medis ahli.", a: ["Mendukung", "Menghambat"], c: 0 },
+      { text: "7. Pihak sekolah mengabaikan PDBK yang sifatnya sementara (misal: anak yang tiba-tiba mogok belajar karena trauma bencana alam).", a: ["Mendukung", "Menghambat"], c: 1 },
+      { text: "8. Kepala sekolah mendorong terciptanya lingkungan belajar yang terbuka dan tidak diskriminatif bagi semua spektrum anak.", a: ["Mendukung", "Menghambat"], c: 0 },
+      { text: "9. Guru memaksakan satu metode mengajar yang kaku untuk semua anak tanpa peduli tingkat IQ dan kemampuan unik mereka.", a: ["Mendukung", "Menghambat"], c: 1 },
+      { text: "10. Sekolah menjadikan Sekolah Luar Biasa (SLB) di wilayahnya sebagai pusat sumber rujukan belajar bagi guru-guru reguler.", a: ["Mendukung", "Menghambat"], c: 0 }
     ]
   },
   {
     level: 4, title: 'Tantangan Adaptasi Kurikulum',
-    desc: 'Tentukan jenis adaptasi pembelajaran yang tepat dari setiap skenario di bawah ini!',
+    desc: 'Pilihlah salah satu dari 5 model Adaptasi Kurikulum (Eskalasi, Duplikasi, Simplikasi, Substitusi, Omisi) yang paling tepat dari praktik ini!',
     q: [
-      { text: "1. Siswa reguler mengerjakan soal operasi hitung pecahan. Siswa Tunagrahita diberi soal penjumlahan dasar 1-10. (Menurunkan tingkat kesulitan).", a: ["Simplikasi", "Duplikasi", "Omisi"], c: 0 },
-      { text: "2. Siswa reguler menyimak audio pidato. Siswa Tunarungu diberikan teks transkrip pidato untuk dibaca secara tertulis. (Mengganti bentuk materi setara).", a: ["Substitusi", "Duplikasi", "Eskalasi"], c: 0 },
-      { text: "3. Anak CIBI (Cerdas Istimewa) diberi proyek riset mandiri tentang fotosintesis sementara temannya masih menghafal dasar daun. (Meningkatkan kesulitan).", a: ["Eskalasi", "Omisi", "Duplikasi"], c: 0 },
-      { text: "4. Siswa Tunadaksa menggunakan format ujian soal pilihan ganda standar nasional yang sama persis seperti siswa reguler lainnya. (Menyajikan sama persis).", a: ["Duplikasi", "Substitusi", "Simplikasi"], c: 0 },
-      { text: "5. Siswa buta total dibebaskan sama sekali dari praktik mewarnai gradasi cat air karena mustahil dan tidak fungsional untuknya. (Menghilangkan sebagian indikator).", a: ["Substitusi", "Duplikasi", "Omisi"], c: 2 },
-      { text: "6. Soal ulangan IPS 10 nomor diringkas hanya menjadi 5 nomor untuk anak Slow Learner. (Menyederhanakan kuantitas).", a: ["Eskalasi", "Simplikasi", "Omisi"], c: 1 },
-      { text: "7. Siswa disleksia ujian menggunakan aplikasi pembaca layar (text-to-speech) dibanding membaca kertas lembar ujian standar. (Mengganti alat ujian).", a: ["Omisi", "Duplikasi", "Substitusi"], c: 2 },
-      { text: "8. Karena ada siswa tunadaksa, asesmen atletik lari jarak jauh ditiadakan baginya dan diubah menjadi lempar bola sejauh-jauhnya dengan tangan.", a: ["Simplikasi", "Substitusi", "Duplikasi"], c: 1 },
-      { text: "9. Anak dengan Autism Spectrum Disorder mengerjakan soal matematika level kelasnya, tetapi dengan font dan jarak spasi yang diperlebar tanpa merubah isi soal.", a: ["Duplikasi (Akomodasi format)", "Omisi", "Eskalasi"], c: 0 },
-      { text: "10. Materi merakit sirkuit listrik yang sangat kompleks dibuang (tidak diajarkan) pada siswa tunagrahita berat dan fokus pada pengenalan bahaya listrik. (Dihilangkan indikator kompleksnya).", a: ["Eskalasi", "Duplikasi", "Omisi"], c: 2 }
+      { text: "1. Anak Cerdas Istimewa (CIBI) diberikan program percepatan waktu dan penguasaan materi di atas teman-temannya. Ini adalah model...", a: ["Eskalasi (Akselerasi)", "Omisi", "Substitusi"], c: 0 },
+      { text: "2. PDBK tunanetra tidak ditugaskan menggambar peta dalam pelajaran IPS, melainkan menggantinya dengan tugas menyanyi. Ini adalah...", a: ["Duplikasi", "Substitusi", "Simplikasi"], c: 1 },
+      { text: "3. Menyederhanakan kurikulum dan materi bacaan tanpa membuang substansi utamanya khusus untuk anak Slow Learner. Ini adalah...", a: ["Omisi", "Simplikasi (Modifikasi)", "Duplikasi"], c: 1 },
+      { text: "4. Menggunakan kurikulum reguler yang sama persis tanpa perubahan sedikitpun untuk PDBK dengan hambatan fisik motorik ringan. Ini adalah...", a: ["Simplikasi", "Eskalasi", "Duplikasi"], c: 2 },
+      { text: "5. Meniadakan atau menghapus sama sekali aspek kurikulum tertentu untuk dibuatkan kurikulum individual karena PDBK tidak mampu mencapainya.", a: ["Substitusi", "Omisi", "Duplikasi"], c: 1 },
+      { text: "6. Jika anak tunarungu mengganti kompetensi 'menyimak pidato audio' dengan format kegiatan lain yang setara yaitu 'membaca teks pidato'.", a: ["Substitusi", "Omisi", "Simplikasi"], c: 0 },
+      { text: "7. Guru kelas sama sekali menghilangkan target pelajaran 'Matematika Aljabar' bagi anak Tunagrahita berat. Ini contoh...", a: ["Omisi", "Duplikasi", "Eskalasi"], c: 0 },
+      { text: "8. PDBK pengguna alat bantu jalan (kruk) mengerjakan soal ujian tertulis Bahasa Indonesia yang sama persis dengan siswa reguler lainnya.", a: ["Simplikasi", "Duplikasi", "Substitusi"], c: 1 },
+      { text: "9. Guru meringkas 3 indikator kompetensi dasar menjadi 1 indikator esensial saja khusus untuk anak dengan hambatan intelektual ringan.", a: ["Simplikasi (Modifikasi)", "Omisi", "Eskalasi"], c: 0 },
+      { text: "10. Siswa reguler membutuhkan 2 minggu untuk menguasai materi A, sementara kurikulum siswa CIBI didesain menyelesaikannya dalam 3 hari.", a: ["Duplikasi", "Substitusi", "Eskalasi (Akselerasi)"], c: 2 }
     ]
   },
   {
-    level: 5, title: 'Inclusion Design Challenge',
-    desc: 'Kasus "Bintang": Siswa kelas 3 SD. Hambatan: Low Vision (penglihatan sisa 20%) & Lamban Belajar. Potensi: Ia memiliki memori pendengaran luar biasa dan suka bernyanyi lagu daerah. Pilih langkah desain inklusif terbaik!',
+    level: 5, title: 'Dimensi Instruksional & Lingkungan',
+    desc: 'Berdasarkan prinsip adaptasi, tentukan apakah skenario di bawah ini termasuk dimensi "Adaptasi Lingkungan Belajar" atau "Adaptasi Instruksional"!',
     q: [
-      { text: "1. (Lingkungan): Posisi tempat duduk terbaik untuk Bintang di kelas adalah...", a: ["Paling belakang agar tidak ketahuan lambat", "Di barisan depan, dekat guru dan dekat sumber cahaya natural", "Di ruang UKS sendirian"], c: 1 },
-      { text: "2. (Media): Media baca yang tepat untuk menstimulasi penglihatannya tanpa membuatnya kelelahan...", a: ["Buku teks ukuran standar SD", "Aplikasi audio penuh tanpa buku fisik sama sekali", "Buku teks dengan huruf besar (Large Print) tebal dan kontras tinggi"], c: 2 },
-      { text: "3. (Instruksional): Karena Bintang lamban belajar, saat memberi instruksi guru harus...", a: ["Mengulang materi, menggunakan instruksi singkat bertahap (chunking)", "Memberikan hafalan satu buku sekaligus", "Berbicara dengan sangat cepat"], c: 0 },
-      { text: "4. (Pendekatan): Memanfaatkan potensinya, cara guru mengajarkan materi IPA (Daur Air) kepada Bintang...", a: ["Menyuruhnya membaca teks Daur Air", "Menggubah materi Daur Air menjadi lirik lagu agar mudah ia hafal dengan nyanyian", "Memintanya menggambar di kertas"], c: 1 },
-      { text: "5. (Evaluasi/Asesmen): Bentuk ujian semester Bahasa Indonesia yang berkeadilan (equity) untuknya...", a: ["Ujian tertulis panjang 2 jam", "Ujian Lisan atau tanya jawab langsung dengan guru", "Diberikan nilai KKM saja tanpa diuji"], c: 1 },
-      { text: "6. (Sosial): Jika teman kelas mengejek kacamata tebal Bintang, tindakan guru...", a: ["Menghukum fisik yang mengejek", "Menjadikan ini momen edukasi empati di kelas dan melibatkan teman menjadi 'buddy' pendamping jalan", "Menyuruh Bintang melepas kacamatanya"], c: 1 },
-      { text: "7. (Lingkungan Mikro): Adaptasi papan tulis agar tulisan guru terlihat oleh Bintang...", a: ["Menggunakan kapur kuning pucat", "Menggunakan spidol hitam tebal (marker) dengan ukuran tulisan diperbesar", "Tidak perlu menulis di papan"], c: 1 },
-      { text: "8. (Kurikulum): Adaptasi yang dilakukan untuk target hafalan UUD 1945 Bintang...", a: ["Omisi: dihapus total karena dia slow learner", "Duplikasi: dituntut hafal persis reguler", "Simplikasi: menyederhanakan panjang hafalan menjadi makna dasar pasalnya saja"], c: 2 },
-      { text: "9. (Fisik Sekolah): Adaptasi infrastruktur agar Bintang tidak sering tersandung...", a: ["Memberikan jalur berpemandu (guiding block) di selasar atau memastikan barang tidak menghalangi lorong", "Menyediakan tongkat listrik", "Menguncinya di kelas"], c: 0 },
-      { text: "10. (Kolaborasi): Melibatkan orang tua Bintang dalam PPI yang paling esensial adalah...", a: ["Menarik iuran biaya tambahan", "Menyepakati agar orang tua mengulangi lagu hafalan materi IPA tersebut di rumah", "Menyuruh orang tua menggantikan guru"], c: 1 }
+      { text: "1. Menempatkan PDBK tunarungu di tengah atau pinggir kelas agar ia lebih leluasa bergerak dan mengamati gerak tubuh guru.", a: ["Adaptasi Lingkungan Belajar", "Adaptasi Instruksional"], c: 0 },
+      { text: "2. Menerapkan strategi 'Tutor Sebaya' di mana anak reguler berkemampuan tinggi mendampingi langsung PDBK yang slow learner.", a: ["Adaptasi Lingkungan Belajar", "Adaptasi Instruksional"], c: 1 },
+      { text: "3. Memosisikan PDBK dengan hambatan penglihatan (low vision) di barisan paling depan agar lebih jelas menerima pelajaran visual.", a: ["Adaptasi Lingkungan Belajar", "Adaptasi Instruksional"], c: 0 },
+      { text: "4. Guru menyesuaikan cara/strategi mengajarnya dengan memberikan instruksi secara bertahap satu per satu, tidak sekaligus panjang.", a: ["Adaptasi Lingkungan Belajar", "Adaptasi Instruksional"], c: 1 },
+      { text: "5. Menata ulang dan melebarkan formasi meja di kelas agar kursi roda milik PDBK hambatan motorik dapat lewat dengan mudah.", a: ["Adaptasi Lingkungan Belajar", "Adaptasi Instruksional"], c: 0 },
+      { text: "6. Selain berceramah, guru menggunakan strategi metode belajar berbasis kinestetik (gerak) untuk mengakomodasi anak ADHD.", a: ["Adaptasi Lingkungan Belajar", "Adaptasi Instruksional"], c: 1 },
+      { text: "7. Menyediakan pencahayaan lampu baca tambahan yang tidak menyilaukan di meja belajar PDBK low vision.", a: ["Adaptasi Lingkungan Belajar", "Adaptasi Instruksional"], c: 0 },
+      { text: "8. Mengubah instruksi tugas: alih-alih murid bekerja mandiri, guru meminta murid membentuk kelompok belajar campuran yang saling melengkapi.", a: ["Adaptasi Lingkungan Belajar", "Adaptasi Instruksional"], c: 1 },
+      { text: "9. Menyingkirkan benda-benda tajam dan memasang karpet empuk di sudut ruangan untuk menciptakan ruang yang aman secara fisik.", a: ["Adaptasi Lingkungan Belajar", "Adaptasi Instruksional"], c: 0 },
+      { text: "10. Memberikan 'strategi perpanjangan waktu' (extra time) dan bimbingan teknis khusus kepada anak disleksia saat mengerjakan kuis bacaan.", a: ["Adaptasi Lingkungan Belajar", "Adaptasi Instruksional"], c: 1 }
     ]
   }
 ];
