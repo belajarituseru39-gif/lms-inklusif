@@ -210,7 +210,7 @@ const finalTestHOTS = [
 ];
 
 // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI BAWAH INI
-const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbycFxPXcq3l1GmpeX75LJvRvHvbqowqoRa3zTUEWqoYgJrmWuvuVg3g1dyKw4I0x9XX/exec';
+const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZjXZ0p3E0SDSz8nBKLSrIipPUEm2XqTI8x6RXsDjaVN90XXWq_5ZCXxCyGAIR3sI/exec';
 
 const state = {
     user: { name: '', school: '', isLogged: false },
@@ -248,7 +248,7 @@ function getMissingRequirements() {
 }
 
 function syncToGoogleSheets() {
-    if(!GOOGLE_APP_SCRIPT_URL || GOOGLE_APP_SCRIPT_URL === 'URL_WEB_APP_ANDA_DISINI') return;
+    if(!GOOGLE_APP_SCRIPT_URL) return;
     
     const payload = {
         waktu: new Date().toLocaleString('id-ID'),
@@ -267,21 +267,29 @@ function syncToGoogleSheets() {
         tes: state.finalScore
     };
 
+    // Menggunakan text/plain agar tidak diblokir oleh CORS policy browser saat mengirim ke Apps Script
     fetch(GOOGLE_APP_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
-    }).then(() => console.log("Berhasil sinkronisasi ke G-Sheets."))
-      .catch(err => console.error("Gagal sinkronisasi", err));
+    }).then(() => {
+        console.log("Berhasil sinkronisasi ke G-Sheets.");
+        showToast("Luar Biasa! Semua misi selesai. Data Anda telah terekam di sistem dan Sertifikat Terbuka!", "success");
+        // Re-render menu agar tombol sertifikat hijau
+        document.getElementById('sidebar-root').innerHTML = renderSidebarInner();
+    }).catch(err => {
+        console.error("Gagal sinkronisasi", err);
+        showToast("Gagal menyimpan data ke server. Pastikan koneksi internet Anda stabil.", "error");
+    });
 }
 
 function checkAndSyncData() {
     const missing = getMissingRequirements();
     if (missing.length === 0 && !state.isSynced) {
         state.isSynced = true;
+        showToast("Sedang mengirim data kelulusan ke server...", "warning");
         syncToGoogleSheets();
-        showToast("Luar Biasa! Semua misi selesai. Data Anda telah direkam dan Sertifikat Terbuka!", "success");
     }
 }
 
