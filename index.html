@@ -8,12 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { 
-            font-family: 'Inter', sans-serif; 
+            font-family: 'Inter', sans-serif;
             background-image: url('https://i.imgur.com/bXFisQf.png');
             background-size: cover;
-            background-position: center;
             background-attachment: fixed;
-            background-color: #f8fafc;
+            background-position: center;
         }
         .fade-in { animation: fadeIn 0.4s ease-in-out; }
         .slide-up { animation: slideUp 0.3s ease-out; }
@@ -34,7 +33,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="text-slate-800">
 
     <div id="toast-container" class="fixed top-4 right-4 z-[60] flex flex-col gap-2"></div>
     <div id="app" class="min-h-screen"></div>
@@ -188,7 +187,7 @@ const activityData = [
 
 const finalTestHOTS = [
   { id: 1, type: 'mc', q: "Budi (Siswa Kelas 1 SD) sering tantrum, menutup telinga, dan bersembunyi di bawah meja saat bel istirahat berbunyi nyaring. Dari analisis sensorik, adaptasi lingkungan (akomodasi) apa yang paling tepat diberikan oleh guru kelas?", a: ["Mengunci pintu kelas rapat-rapat", "Menyediakan earmuff (pelindung telinga) atau 'Safe Space' di pojok kelas saat bel berbunyi", "Menyuruh siswa lain menertawakannya", "Memaksa Budi berdiri di dekat pengeras suara agar terbiasa"], c: 1 },
-  { id: 2, type: 'mc', q: "Siti (Kelas 3 SD) kesulitan membaca nyaring. Ia sering membalik huruf 'p' menjadi 'q' pada buku tematiknya, namun sangat cerdas dalam sesi tanya jawab lisan tentang IPA. Modifikasi evaluasi apa yang paling inklusif untuk Siti?", a: ["Memberikan ujian lisan atau menggunakan aplikasi text-to-speech daripada ujian membaca panjang", "Menghukum Siti menyalin buku tematik 10 kali", "Menurunkan Siti ke kelas 2 SD", "Memberi nilai 0 pada semua mata pelajaran"], c: 1 },
+  { id: 2, type: 'mc', q: "Siti (Kelas 3 SD) kesulitan membaca nyaring. Ia sering membalik huruf 'p' menjadi 'q' pada buku tematiknya, namun sangat cerdas dalam sesi tanya jawab lisan tentang IPA. Modifikasi evaluasi apa yang paling inklusif untuk Siti?", a: ["Memberikan ujian lisan atau menggunakan aplikasi text-to-speech daripada ujian membaca panjang", "Menghukum Siti menyalin buku tematik 10 kali", "Menurunkan Siti ke kelas 2 SD", "Memberi nilai 0 pada semua mata pelajaran"], c: 0 },
   { id: 3, type: 'mc', q: "Dalam pelajaran IPS kelas 5 SD tentang letak pulau di Indonesia, terdapat satu siswa tunanetra (buta total). Media pembelajaran apa (Substitusi) yang wajib disediakan guru agar ia mencapai tujuan pembelajaran yang sama?", a: ["Peta dinding ukuran besar", "Video YouTube tentang pulau di Indonesia", "Peta timbul (3D/taktil) dari bubur kertas atau puzzle kayu berpola", "Menyuruhnya membayangkan pulau-pulau tersebut"], c: 2 },
   { id: 4, type: 'mc', q: "Dinda (Kelas 2 SD) didiagnosis ADHD. Ia tidak bisa duduk diam lebih dari 10 menit saat pelajaran Matematika dan sering mengganggu temannya. Strategi instruksional 'Chunking' yang bisa diterapkan guru adalah...", a: ["Meminta Dinda mengerjakan 50 soal sekaligus di papan tulis", "Memecah tugas menjadi 5 soal, diselingi tugas bergerak (misal: mengambil kapur), lalu lanjut 5 soal lagi", "Menempatkan meja Dinda di luar kelas", "Meniadakan jam matematika untuk Dinda"], c: 1 },
   { id: 5, type: 'mc', q: "Edo adalah siswa lamban belajar (slow learner) di kelas 4 SD. Saat ada tugas proyek kelompok Biologi (membuat ekosistem), peran kolaboratif apa yang paling menghargai potensinya tanpa membuatnya minder?", a: ["Menjadikannya ketua kelompok yang presentasi teori berat", "Dilarang ikut kerja kelompok agar nilainya tidak membebani teman", "Diberikan peran fungsional terarah, misalnya bagian menempel dan menata miniatur hewan sesuai instruksi teman", "Diisolasi di perpustakaan"], c: 2 },
@@ -209,89 +208,26 @@ const finalTestHOTS = [
   { id: 20, type: 'mcc', q: "(Pilih Lebih Dari Satu) Asesmen adaptif untuk pelajaran PJOK (Olahraga) di SD bagi siswa Tunadaksa (kelumpuhan kaki) materi Atletik Lari adalah...", options: ["Memberi nilai 0 otomatis karena fisiknya tidak mampu", "Mengganti asesmen dengan aktivitas yang mengukur daya tahan bagian tubuh atas (misal: lempar tangkap bola modifikasi)", "Melibatkan siswa sebagai pencatat skor atau juri garis (partisipasi fungsional)", "Memaksa siswa ikut berlari sejauh kemampuannya walau sakit"], a: [1, 2] }
 ];
 
-// MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI BAWAH INI
+// URL WEB APP GOOGLE APPS SCRIPT
 const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZjXZ0p3E0SDSz8nBKLSrIipPUEm2XqTI8x6RXsDjaVN90XXWq_5ZCXxCyGAIR3sI/exec';
 
 const state = {
     user: { name: '', school: '', isLogged: false },
     currentView: 'login', 
     scores: { m1: null, m2: null, m3: null, m4: null },
+    
     activityQuest: {
         currentLevel: 1,
         totalPoints: 0,
         scores: { l1: null, l2: null, l3: null, l4: null, l5: null },
         tempAnswers: {}
     },
+    
     actionPlan: '',
     finalScore: null,
     tempAnswers: {},
-    isSynced: false
+    isSubmitting: false
 };
-
-function getMissingRequirements() {
-    const missing = [];
-    if (state.scores.m1 === null) missing.push("Materi 1");
-    if (state.scores.m2 === null) missing.push("Materi 2");
-    if (state.scores.m3 === null) missing.push("Materi 3");
-    if (state.scores.m4 === null) missing.push("Materi 4");
-    
-    let isActComplete = true;
-    for(let i=1; i<=5; i++) {
-        if(state.activityQuest.scores[`l${i}`] === null || state.activityQuest.scores[`l${i}`] < 80) isActComplete = false;
-    }
-    if (!isActComplete) missing.push("Aktivitas Mandiri (Lv 1-5)");
-    
-    if (!state.actionPlan || state.actionPlan.trim() === '') missing.push("Rencana Aksi");
-    if (state.finalScore === null || state.finalScore < 70) missing.push("Tes Akhir (Min 70)");
-    
-    return missing;
-}
-
-function syncToGoogleSheets() {
-    if(!GOOGLE_APP_SCRIPT_URL) return;
-    
-    const payload = {
-        waktu: new Date().toLocaleString('id-ID'),
-        nama: state.user.name,
-        sekolah: state.user.school,
-        m1: state.scores.m1,
-        m2: state.scores.m2,
-        m3: state.scores.m3,
-        m4: state.scores.m4,
-        a1: state.activityQuest.scores.l1,
-        a2: state.activityQuest.scores.l2,
-        a3: state.activityQuest.scores.l3,
-        a4: state.activityQuest.scores.l4,
-        a5: state.activityQuest.scores.l5,
-        aksi: state.actionPlan,
-        tes: state.finalScore
-    };
-
-    // Menggunakan text/plain agar tidak diblokir oleh CORS policy browser saat mengirim ke Apps Script
-    fetch(GOOGLE_APP_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-    }).then(() => {
-        console.log("Berhasil sinkronisasi ke G-Sheets.");
-        showToast("Luar Biasa! Semua misi selesai. Data Anda telah terekam di sistem dan Sertifikat Terbuka!", "success");
-        // Re-render menu agar tombol sertifikat hijau
-        document.getElementById('sidebar-root').innerHTML = renderSidebarInner();
-    }).catch(err => {
-        console.error("Gagal sinkronisasi", err);
-        showToast("Gagal menyimpan data ke server. Pastikan koneksi internet Anda stabil.", "error");
-    });
-}
-
-function checkAndSyncData() {
-    const missing = getMissingRequirements();
-    if (missing.length === 0 && !state.isSynced) {
-        state.isSynced = true;
-        showToast("Sedang mengirim data kelulusan ke server...", "warning");
-        syncToGoogleSheets();
-    }
-}
 
 const appDiv = document.getElementById('app');
 
@@ -316,13 +252,17 @@ function showToast(msg, type = 'info') {
 function renderLogin() {
     return `
         <div class="min-h-screen bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-            <div class="max-w-md w-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.15)] overflow-hidden fade-in">
-                <div class="bg-indigo-600 p-8 text-center">
-                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-3xl">
-                        <i class="fas fa-graduation-cap"></i>
+            <div class="max-w-md w-full bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.1)] overflow-hidden fade-in">
+                <div class="bg-indigo-600 p-8 text-center relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500 rounded-full mix-blend-multiply opacity-50 blur-xl"></div>
+                    <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-indigo-700 rounded-full mix-blend-multiply opacity-50 blur-xl"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-3xl">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h1 class="text-2xl font-black text-white leading-tight">Pendidikan Inklusif SD</h1>
+                        <p class="text-indigo-100 font-medium mt-2">Wujudkan Pendidikan Bermutu Untuk Semua</p>
                     </div>
-                    <h1 class="text-2xl font-black text-white leading-tight">Pendidikan Inklusif SD</h1>
-                    <p class="text-indigo-100 font-medium mt-2">Wujudkan Pendidikan Bermutu Untuk Semua</p>
                 </div>
                 <div class="p-8">
                     <h2 class="text-lg font-bold mb-6 text-center text-slate-700">Selamat Datang Pendidik Hebat!</h2>
@@ -353,14 +293,19 @@ function renderSidebarInner() {
         { id: 'm3', label: 'Materi 3: Adaptasi', icon: 'fa-play-circle', completed: state.scores.m3 !== null },
         { id: 'm4', label: 'Materi 4: Kebutuhan Khusus', icon: 'fa-play-circle', completed: state.scores.m4 !== null },
         { id: 'summary', label: 'Rangkuman Materi', icon: 'fa-file-alt' },
-        { id: 'activity', label: 'Aktivitas Mandiri', icon: 'fa-tasks', completed: state.activityQuest.scores.l5 >= 80 },
+        { id: 'activity', label: 'Aktivitas Mandiri', icon: 'fa-tasks', completed: state.activityQuest.scores.l5 !== null && state.activityQuest.scores.l5 >= 80 },
         { id: 'plan', label: 'Rencana Aksi', icon: 'fa-edit', completed: state.actionPlan.trim() !== '' },
-        { id: 'final', label: 'Tes Akhir (HOTS)', icon: 'fa-book-open', completed: state.finalScore >= 70 },
+        { id: 'final', label: 'Tes Akhir (HOTS)', icon: 'fa-book-open', completed: state.finalScore !== null },
     ];
 
-    const missingReqs = getMissingRequirements();
-    const certUnlocked = missingReqs.length === 0;
-    const missingText = missingReqs.length > 0 ? missingReqs[0] + (missingReqs.length > 1 ? ` (+${missingReqs.length - 1} lainnya)` : '') : '';
+    const isAllCompleted = 
+        state.scores.m1 !== null && 
+        state.scores.m2 !== null && 
+        state.scores.m3 !== null && 
+        state.scores.m4 !== null && 
+        state.activityQuest.scores.l5 !== null && state.activityQuest.scores.l5 >= 80 &&
+        state.actionPlan.trim() !== '' &&
+        state.finalScore !== null && state.finalScore >= 70;
 
     let navHtml = menuItems.map(item => `
         <button onclick="changeView('${item.id}')" 
@@ -373,10 +318,11 @@ function renderSidebarInner() {
     `).join('');
 
     return `
-        <div class="p-6 border-b border-indigo-700 bg-indigo-600 text-white">
-            <h2 class="font-black text-xl tracking-tight leading-tight">LMS Inklusif SD</h2>
-            <div class="mt-5 flex items-center gap-3 bg-indigo-700/50 p-3 rounded-xl border border-indigo-500/30">
-                <div class="w-10 h-10 rounded-full bg-indigo-200 text-indigo-800 flex items-center justify-center font-bold">
+        <div class="p-6 border-b border-indigo-700 bg-indigo-600 text-white relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500 rounded-full mix-blend-multiply opacity-50 blur-xl"></div>
+            <h2 class="relative z-10 font-black text-xl tracking-tight leading-tight">LMS Inklusif SD</h2>
+            <div class="relative z-10 mt-5 flex items-center gap-3 bg-indigo-700/50 p-3 rounded-xl border border-indigo-500/30">
+                <div class="w-10 h-10 rounded-full bg-indigo-200 text-indigo-800 flex items-center justify-center font-bold shrink-0">
                     <i class="fas fa-user text-lg"></i>
                 </div>
                 <div class="overflow-hidden flex-1">
@@ -388,12 +334,12 @@ function renderSidebarInner() {
         <div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
             <nav class="space-y-1.5">
                 ${navHtml}
-                <button onclick="${certUnlocked ? "changeView('cert')" : `showToast('Belum Tuntas! Selesaikan: ${missingText}', 'error')`}" 
+                <button onclick="${isAllCompleted ? "changeView('cert')" : "showToast('Selesaikan SEMUA materi, aktivitas, aksi, dan lulus Tes Akhir (Min 70) untuk membuka sertifikat.', 'warning')"}" 
                     class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl transition-all mt-6
-                    ${certUnlocked ? (state.currentView === 'cert' ? 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-300' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 ring-1 ring-emerald-200') : 'bg-slate-50 text-slate-400 cursor-not-allowed border border-slate-200'}">
-                    <i class="fas fa-award ${certUnlocked ? 'text-emerald-500' : 'text-slate-300'} text-lg"></i>
+                    ${isAllCompleted ? (state.currentView === 'cert' ? 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-300' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 ring-1 ring-emerald-200') : 'bg-slate-50 text-slate-400 cursor-not-allowed border border-slate-200'}">
+                    <i class="fas fa-award ${isAllCompleted ? 'text-emerald-500' : 'text-slate-300'} text-lg"></i>
                     <span class="flex-1 text-left">Sertifikat Kelulusan</span>
-                    ${!certUnlocked ? '<i class="fas fa-lock"></i>' : ''}
+                    ${!isAllCompleted ? '<i class="fas fa-lock"></i>' : ''}
                 </button>
             </nav>
         </div>
@@ -410,21 +356,36 @@ function renderDashboard() {
                 <h2 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight">Pendidikan Inklusif SD</h2>
                 <p class="text-xl md:text-2xl text-indigo-600 font-bold mt-3">Wujudkan Pendidikan Bermutu Untuk Semua</p>
             </div>
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
+            <div class="bg-white/95 p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
                 <h3 class="text-2xl font-bold flex items-center gap-3 mb-6 text-slate-800">
                     <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-500 flex items-center justify-center text-2xl"><i class="fas fa-award"></i></div>
-                    Syarat Mendapatkan Sertifikat
+                    Tujuan Pelatihan
                 </h3>
-                <div class="p-5 bg-rose-50 border border-rose-200 rounded-xl mb-5">
-                    <p class="text-rose-800 font-bold flex items-center gap-2"><i class="fas fa-exclamation-triangle"></i> Penting!</p>
-                    <p class="text-rose-700 mt-1">Sertifikat <b>hanya terbuka</b> dan data dikirim ke sistem jika seluruh misi 100% selesai.</p>
-                </div>
                 <ul class="space-y-4 text-slate-600 font-medium text-lg leading-relaxed">
-                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Menyelesaikan Video & Kuis di <b>Materi 1 hingga Materi 4</b>.</span></li>
-                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Mendapat nilai minimal 80 pada ke-5 Level <b>Aktivitas Mandiri</b>.</span></li>
-                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Menyusun dan menyimpan <b>Rencana Aksi</b>.</span></li>
-                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Lulus <b>Tes Akhir (HOTS)</b> dengan nilai minimal 70.</span></li>
+                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Membongkar miskonsepsi mengenai pendidikan inklusif di lingkungan SD.</span></li>
+                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Memahami pengertian esensial dan landasan filosofis pendidikan untuk semua.</span></li>
+                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Menerapkan prinsip adaptasi kurikulum serta lingkungan fisik dan sosial SD.</span></li>
+                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Mengenal jenis kebutuhan khusus peserta didik (ABK).</span></li>
+                    <li class="flex items-start gap-4"><i class="fas fa-check-circle text-emerald-500 mt-1 text-xl"></i> <span>Melatih kemampuan menganalisis studi kasus nyata berbasis HOTS di Sekolah Dasar.</span></li>
                 </ul>
+            </div>
+            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-3xl border border-indigo-100 shadow-sm">
+                <h3 class="text-2xl font-bold flex items-center gap-3 mb-6 text-indigo-900">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xl shadow-md"><i class="fas fa-book-open"></i></div>
+                    Panduan Penggunaan LMS
+                </h3>
+                <div class="bg-white/60 p-4 rounded-xl mb-6 border border-indigo-200">
+                    <p class="text-indigo-800 font-bold"><i class="fas fa-info-circle"></i> SYARAT SERTIFIKAT:</p>
+                    <p class="text-indigo-700 text-sm mt-1">Anda wajib menuntaskan <span class="underline">seluruh tahapan</span> di bawah ini hingga muncul tanda centang hijau di panel kiri agar sertifikat dapat dibuka.</p>
+                </div>
+                <ol class="space-y-5 text-indigo-900 font-medium md:text-lg">
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-indigo-200 text-indigo-800 flex items-center justify-center font-black shrink-0">1</span> <span>Gunakan menu di <strong>panel kiri</strong> untuk bernavigasi secara berurutan.</span></li>
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-indigo-200 text-indigo-800 flex items-center justify-center font-black shrink-0">2</span> <span>Pelajari materi melalui <strong>Video Embed</strong> pada tiap bagian.</span></li>
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-indigo-200 text-indigo-800 flex items-center justify-center font-black shrink-0">3</span> <span>Kerjakan 10 soal uji pemahaman (Kuis) setelah menonton video materi 1 sampai 4.</span></li>
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-amber-200 text-amber-800 flex items-center justify-center font-black shrink-0">4</span> <span>Selesaikan <strong>Aktivitas Mandiri</strong> (Sistem Penilaian Otomatis 5 Level). Level berikutnya terbuka jika nilai minimal <strong>80</strong>.</span></li>
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-indigo-200 text-indigo-800 flex items-center justify-center font-black shrink-0">5</span> <span>Tulis komitmen nyata Anda di <strong>Rencana Aksi</strong>.</span></li>
+                    <li class="flex items-start gap-4"><span class="w-8 h-8 rounded-lg bg-emerald-200 text-emerald-800 flex items-center justify-center font-black shrink-0">6</span> <span>Selesaikan <strong>Tes Akhir (HOTS)</strong> dengan syarat nilai minimal 70.</span></li>
+                </ol>
             </div>
         </div>
     `;
@@ -441,7 +402,7 @@ function renderSummary() {
                 <p class="text-xl md:text-2xl text-indigo-600 font-bold mt-3">Modul Pendidikan Inklusif</p>
             </div>
 
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="bg-white/95 p-8 rounded-3xl border border-slate-200 shadow-sm">
                 <h3 class="text-2xl font-bold flex items-center gap-3 mb-4 text-indigo-900">
                     <i class="fas fa-bullseye text-indigo-500"></i> 1. Konsep Dasar & Tujuan
                 </h3>
@@ -450,7 +411,7 @@ function renderSummary() {
                 </p>
             </div>
 
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="bg-white/95 p-8 rounded-3xl border border-slate-200 shadow-sm">
                 <h3 class="text-2xl font-bold flex items-center gap-3 mb-5 text-indigo-900">
                     <i class="fas fa-lightbulb text-amber-500"></i> 2. Meluruskan Miskonsepsi
                 </h3>
@@ -474,7 +435,7 @@ function renderSummary() {
                 </ul>
             </div>
 
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="bg-white/95 p-8 rounded-3xl border border-slate-200 shadow-sm">
                 <h3 class="text-2xl font-bold flex items-center gap-3 mb-5 text-indigo-900">
                     <i class="fas fa-users text-emerald-500"></i> 3. Klasifikasi PDBK
                 </h3>
@@ -489,13 +450,13 @@ function renderSummary() {
                 </ul>
             </div>
 
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="bg-white/95 p-8 rounded-3xl border border-slate-200 shadow-sm">
                 <h3 class="text-2xl font-bold flex items-center gap-3 mb-5 text-indigo-900">
                     <i class="fas fa-cogs text-blue-500"></i> 4. Prinsip Adaptasi Inklusif
                 </h3>
                 <p class="text-slate-600 text-lg mb-4">Adaptasi ini memiliki 3 dimensi utama untuk menjaga fleksibilitas pembelajaran:</p>
                 <div class="space-y-4 text-slate-600 text-lg leading-relaxed">
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div class="p-4 bg-slate-50/80 rounded-xl border border-slate-100">
                         <b class="text-indigo-800"><i class="fas fa-book mr-2"></i>Adaptasi Kurikulum (5 Model):</b>
                         <ul class="list-disc pl-8 mt-2 space-y-1">
                             <li><b>Eskalasi:</b> Percepatan waktu (akselerasi).</li>
@@ -505,11 +466,11 @@ function renderSummary() {
                             <li><b>Omisi:</b> Meniadakan/membuang kompetensi tertentu bagi anak yang tidak mampu.</li>
                         </ul>
                     </div>
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div class="p-4 bg-slate-50/80 rounded-xl border border-slate-100">
                         <b class="text-indigo-800"><i class="fas fa-chalkboard-teacher mr-2"></i>Adaptasi Instruksional:</b>
                         <p class="mt-1">Menyesuaikan strategi mengajar, seperti metode 'Tutor Sebaya' (anak pintar mendampingi slow learner).</p>
                     </div>
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div class="p-4 bg-slate-50/80 rounded-xl border border-slate-100">
                         <b class="text-indigo-800"><i class="fas fa-chair mr-2"></i>Adaptasi Lingkungan Belajar:</b>
                         <p class="mt-1">Menata ruang fisik. Contoh: menempatkan PDBK low vision di depan atau PDBK tunarungu di tengah kelas.</p>
                     </div>
@@ -546,7 +507,7 @@ function renderMateri(id) {
         }).join('');
 
         return `
-            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm mb-4">
+            <div class="bg-white/95 p-6 rounded-2xl border border-slate-100 shadow-sm mb-4">
                 <p class="font-bold text-slate-700 mb-4 text-lg">${q.q}</p>
                 <div class="space-y-3">${optsHtml}</div>
             </div>
@@ -558,7 +519,7 @@ function renderMateri(id) {
         const alertClass = score >= 70 ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-800 border-amber-200';
         const icon = score >= 70 ? 'fa-star text-emerald-500' : 'fa-exclamation-triangle text-amber-500';
         scoreAlert = `
-            <div class="p-6 rounded-2xl mb-8 flex flex-col items-center justify-center border-2 border-dashed ${alertClass} slide-up">
+            <div class="p-6 rounded-2xl mb-8 flex flex-col items-center justify-center border-2 border-dashed ${alertClass} slide-up bg-white/90">
                 <i class="fas ${icon} text-4xl mb-2"></i>
                 <h3 class="text-2xl font-black">Nilai Kuis: ${score} / 100</h3>
             </div>`;
@@ -566,13 +527,13 @@ function renderMateri(id) {
 
     return `
         <div class="space-y-8 fade-in">
-            <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">${data.title}</h2>
-            <div class="relative w-full bg-slate-900 rounded-3xl overflow-hidden shadow-xl" style="padding-top: 56.25%;">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight text-center md:text-left">${data.title}</h2>
+            <div class="relative w-full bg-slate-900 rounded-3xl overflow-hidden shadow-xl border-4 border-white/50" style="padding-top: 56.25%;">
                 <iframe class="absolute top-0 left-0 w-full h-full" src="${data.video}" frameborder="0" allowfullscreen></iframe>
             </div>
-            <div class="mt-10 pt-10 border-t border-slate-200">
+            <div class="mt-10 pt-10 border-t border-slate-300">
                 <div class="flex items-center gap-3 mb-6">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl"><i class="fas fa-pencil-alt"></i></div>
+                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl shadow-sm"><i class="fas fa-pencil-alt"></i></div>
                     <h3 class="text-2xl font-bold text-slate-800">Uji Pemahaman</h3>
                 </div>
                 ${scoreAlert}
@@ -595,7 +556,7 @@ function renderActivity() {
         
         let btnCls = `w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg transition-all `;
         if(l === lvl) btnCls += 'ring-4 ring-indigo-200 shadow-md ';
-        if(!isUnlocked) btnCls += 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200';
+        if(!isUnlocked) btnCls += 'bg-slate-100/80 text-slate-400 cursor-not-allowed border border-slate-200';
         else if(score >= 80) btnCls += 'bg-emerald-500 text-white shadow-emerald-200 shadow-lg';
         else btnCls += 'bg-indigo-600 text-white cursor-pointer shadow-indigo-200 shadow-lg';
         
@@ -630,7 +591,7 @@ function renderActivity() {
         }).join('');
 
         return `
-            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm mb-4">
+            <div class="bg-slate-50/50 p-6 rounded-2xl border border-slate-200 shadow-sm mb-4">
                 <p class="font-bold text-slate-700 mb-4 text-lg">${q.text}</p>
                 <div class="grid md:grid-cols-2 gap-3">${optionsHtml}</div>
             </div>
@@ -646,22 +607,22 @@ function renderActivity() {
 
     return `
         <div class="space-y-8 fade-in relative">
-            <div class="flex flex-col md:flex-row items-center justify-between border-b border-slate-200 pb-6">
+            <div class="flex flex-col md:flex-row items-center justify-between border-b border-slate-300 pb-6">
                 <div>
                     <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight">Aktivitas Mandiri</h2>
-                    <p class="text-slate-500 font-medium mt-2 text-lg">Sistem Penilaian Otomatis - Selesaikan Misi Anda</p>
+                    <p class="text-slate-600 font-medium mt-2 text-lg">Sistem Penilaian Otomatis - Selesaikan Misi Anda</p>
                 </div>
                 <div class="mt-6 md:mt-0 flex flex-col items-end">
                     <div class="flex gap-3">${navHtml}</div>
-                    <div class="mt-4 text-sm font-bold bg-slate-100 py-2 px-4 rounded-xl text-slate-600 border border-slate-200">
+                    <div class="mt-4 text-sm font-bold bg-white/80 py-2 px-4 rounded-xl text-slate-700 border border-slate-200 shadow-sm">
                         Total Poin: <span class="text-indigo-600 text-xl">${st.totalPoints}/500</span>
                     </div>
                 </div>
             </div>
             
-            ${st.totalPoints > 0 ? `<div class="bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200 p-5 rounded-2xl text-center font-bold text-amber-900 shadow-sm text-lg slide-up">Pencapaian Saat Ini: ${predText}</div>` : ''}
+            ${st.totalPoints > 0 ? `<div class="bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200 p-5 rounded-2xl text-center font-bold text-amber-900 shadow-md text-lg slide-up">Pencapaian Saat Ini: ${predText}</div>` : ''}
 
-            <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm">
+            <div class="bg-white/95 border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm">
                 <div class="mb-8">
                     <h3 class="text-2xl md:text-3xl font-black text-indigo-900 mb-3">Level ${l}: ${actData.title}</h3>
                     <p class="text-slate-600 font-medium text-lg leading-relaxed">${actData.desc}</p>
@@ -694,15 +655,15 @@ function renderPlan() {
                 <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-2xl shadow-sm"><i class="fas fa-rocket"></i></div> 
                 Rencana Aksi
             </h2>
-            <p class="text-slate-600 font-medium text-lg">Setelah menyelesaikan Aktivitas Mandiri, tulislah langkah nyata yang akan Anda lakukan di kelas/sekolah Anda dalam 1 hingga 3 bulan ke depan.</p>
-            <div class="bg-amber-50 p-6 border-l-4 border-amber-400 rounded-r-2xl shadow-sm">
+            <p class="text-slate-700 font-medium text-lg">Setelah menyelesaikan Aktivitas Mandiri, tulislah langkah nyata yang akan Anda lakukan di kelas/sekolah Anda dalam 1 hingga 3 bulan ke depan.</p>
+            <div class="bg-amber-50/90 p-6 border-l-4 border-amber-400 rounded-r-2xl shadow-sm backdrop-blur-sm">
                 <p class="text-base text-amber-900 font-bold mb-2">Panduan Penulisan:</p>
                 <ul class="text-base text-amber-800 list-disc pl-5 space-y-2">
                     <li>Fokus pada adaptasi fisik kelas atau adaptasi metode mengajar secara spesifik.</li>
                     <li>Sebutkan wujud kolaborasi yang akan Anda jalin dengan orang tua atau teman sejawat.</li>
                 </ul>
             </div>
-            <textarea id="planText" class="w-full h-72 p-6 border border-slate-300 rounded-3xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none resize-none text-slate-700 shadow-inner font-medium text-lg leading-relaxed" placeholder="Ketik rencana aksi Anda di sini...">${state.actionPlan}</textarea>
+            <textarea id="planText" class="w-full h-72 p-6 border border-slate-300 rounded-3xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none resize-none text-slate-700 shadow-inner font-medium text-lg leading-relaxed bg-white/95" placeholder="Ketik rencana aksi Anda di sini...">${state.actionPlan}</textarea>
             <button onclick="savePlan()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-5 px-10 rounded-2xl shadow-lg transition-all w-full md:w-auto text-xl">Simpan Komitmen</button>
         </div>
     `;
@@ -759,9 +720,9 @@ function renderFinalTest() {
         }
 
         return `
-            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-6">
+            <div class="bg-white/95 p-6 md:p-8 rounded-3xl border border-slate-200 shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-6">
                 <div class="flex gap-4 items-start mb-6">
-                    <span class="w-12 h-12 flex items-center justify-center bg-indigo-100 text-indigo-700 font-black rounded-xl text-xl flex-shrink-0">${idx + 1}</span>
+                    <span class="w-12 h-12 flex items-center justify-center bg-indigo-100 text-indigo-700 font-black rounded-xl text-xl flex-shrink-0 shadow-sm">${idx + 1}</span>
                     <div>
                         <p class="font-bold text-slate-800 text-lg leading-snug">${q.q}</p>
                         ${q.type === 'mcc' ? '<span class="text-xs font-black text-purple-700 bg-purple-100 px-3 py-1.5 rounded-md mt-3 inline-block uppercase tracking-wider"><i class="fas fa-check-double"></i> Pilih lebih dari satu jawaban</span>' : ''}
@@ -776,19 +737,28 @@ function renderFinalTest() {
     if (submitted) {
         const isLulus = state.finalScore >= 70;
         scoreAlert = `
-            <div class="p-8 rounded-3xl mb-10 text-center shadow-lg border-2 ${isLulus ? 'bg-emerald-50 border-emerald-400 shadow-emerald-100' : 'bg-red-50 border-red-400 shadow-red-100'} slide-up">
+            <div class="p-8 rounded-3xl mb-10 text-center shadow-lg border-2 ${isLulus ? 'bg-emerald-50 border-emerald-400 shadow-emerald-100' : 'bg-red-50 border-red-400 shadow-red-100'} slide-up bg-white/90">
                 <i class="fas ${isLulus ? 'fa-award text-emerald-500' : 'fa-times-circle text-red-500'} text-6xl mb-5"></i>
                 <h3 class="text-4xl font-black ${isLulus ? 'text-emerald-800' : 'text-red-800'}">Skor Akhir: ${state.finalScore} / 100</h3>
-                <p class="mt-4 text-xl font-bold ${isLulus ? 'text-emerald-600' : 'text-red-600'}">${isLulus ? 'Luar biasa! Evaluasi selesai.' : 'Belum mencapai KKM (70). Evaluasi kembali jawaban Anda.'}</p>
+                <p class="mt-4 text-xl font-bold ${isLulus ? 'text-emerald-600' : 'text-red-600'}">${isLulus ? 'Luar biasa! Sertifikat telah terbuka.' : 'Belum mencapai KKM (70). Evaluasi kembali jawaban Anda.'}</p>
             </div>
         `;
     }
 
     return `
-        <div class="space-y-6 fade-in">
-            <div class="text-center pb-8 border-b border-slate-200">
+        <div class="space-y-6 fade-in relative">
+            ${state.isSubmitting ? `
+                <div class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
+                    <div class="bg-white p-8 rounded-3xl shadow-2xl flex flex-col items-center max-w-sm text-center">
+                        <i class="fas fa-spinner fa-spin text-5xl text-indigo-600 mb-4"></i>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Memproses Kelulusan...</h3>
+                        <p class="text-slate-500">Menganalisis hasil dan mengirim data ke server. Mohon tunggu sebentar.</p>
+                    </div>
+                </div>
+            ` : ''}
+            <div class="text-center pb-8 border-b border-slate-300">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-slate-800 tracking-tight">Tes Akhir (HOTS)</h2>
-                <p class="text-slate-500 text-xl mt-4 font-medium">20 Studi Kasus SD: Pilihan Ganda & Ganda Kompleks.</p>
+                <p class="text-slate-700 text-xl mt-4 font-medium">20 Studi Kasus SD: Pilihan Ganda & Ganda Kompleks.</p>
             </div>
             ${scoreAlert}
             <div class="mt-10">${qsHtml}</div>
@@ -808,11 +778,16 @@ function renderCertificate() {
 
     return `
         <div class="space-y-6 fade-in relative">
-            <div class="flex justify-between items-center mb-6 no-print">
+            <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-6 no-print">
                 <h2 class="text-3xl font-extrabold text-slate-800">Sertifikat</h2>
-                <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl shadow-lg shadow-indigo-200 font-bold flex items-center gap-2 transition-all">
-                    <i class="fas fa-print"></i> Cetak PDF
-                </button>
+                <div class="flex gap-3">
+                    <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-200 font-bold flex items-center gap-2 transition-all">
+                        <i class="fas fa-file-pdf"></i> Cetak / PDF
+                    </button>
+                    <button onclick="downloadWord()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl shadow-lg shadow-blue-200 font-bold flex items-center gap-2 transition-all">
+                        <i class="fas fa-file-word"></i> Unduh MS Word
+                    </button>
+                </div>
             </div>
             <div id="print-area" class="p-4 border-[16px] border-double border-indigo-900 bg-white relative overflow-hidden" style="min-height: 700px;">
                 <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-indigo-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 -translate-x-1/2 -translate-y-1/2"></div>
@@ -836,14 +811,68 @@ function renderCertificate() {
                         </div>
                         <div class="text-center">
                             <p class="text-slate-500 italic mb-6">Penyelenggara Pelatihan</p>
-                            <div class="w-48 h-1 bg-slate-800 mx-auto mb-2"></div>
-                            <p class="font-bold text-slate-800 text-xl">Direktur Program</p>
+                            <div class="w-56 h-1 bg-slate-800 mx-auto mb-2"></div>
+                            <p class="font-bold text-slate-800 text-xl">KKG Balikpapan Tengah</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     `;
+}
+
+// Fungsi Download Word
+function downloadWord() {
+    const date = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+    let predText = 'Perlu Pendampingan Lanjutan';
+    const st = state.activityQuest;
+    if(st.totalPoints >= 450) predText = 'Champion of Inclusive Education';
+    else if(st.totalPoints >= 400) predText = 'Inclusive Education Expert';
+    else if(st.totalPoints >= 350) predText = 'Inclusive Education Practitioner';
+    else if(st.totalPoints >= 300) predText = 'Inclusive Education Explorer';
+
+    const content = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head><meta charset='utf-8'><title>Sertifikat</title></head>
+        <body style="text-align: center; font-family: 'Segoe UI', Arial, sans-serif;">
+            <div style="border: 6px double #312e81; padding: 40px; margin: 20px;">
+                <h1 style="color: #1e3a8a; font-size: 36px; text-transform: uppercase;">Sertifikat Kelulusan</h1>
+                <p style="font-size: 16px; color: #64748b;">Diberikan dengan penuh rasa bangga kepada:</p>
+                <h2 style="font-size: 28px; color: #1e293b; border-bottom: 2px solid #cbd5e1; display: inline-block; padding-bottom: 10px; text-transform: capitalize;">${state.user.name}</h2>
+                <p style="font-size: 20px; color: #4f46e5; font-weight: bold; text-transform: capitalize;">${state.user.school}</p>
+                <p style="font-size: 16px; color: #334155; line-height: 1.6; margin-top: 30px;">
+                    Telah menuntaskan Tes Akhir (Skor: ${state.finalScore}) dan Aktivitas Mandiri dengan Predikat:<br>
+                    <span style="font-weight: bold; color: #b45309; font-size: 20px; display: block; margin-top: 10px;">${predText}</span>
+                </p>
+                <p style="font-style: italic; color: #64748b; margin-top: 20px;">"Wujudkan Pendidikan Bermutu Untuk Semua"</p>
+                
+                <table style="width: 100%; margin-top: 40px;">
+                    <tr>
+                        <td style="text-align: center; width: 50%;">
+                            <p style="color: #64748b; font-style: italic;">Diberikan pada tanggal</p>
+                            <p style="font-weight: bold; color: #1e293b;">${date}</p>
+                        </td>
+                        <td style="text-align: center; width: 50%;">
+                            <p style="color: #64748b; font-style: italic;">Penyelenggara Pelatihan</p>
+                            <p style="margin-top: 40px; font-weight: bold; color: #1e293b; text-decoration: underline;">KKG Balikpapan Tengah</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </body>
+        </html>
+    `;
+
+    const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = url;
+    downloadLink.download = `Sertifikat_${state.user.name.replace(/\s+/g, '_')}.doc`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    
+    showToast("Dokumen Sertifikat MS Word berhasil diunduh!", "success");
 }
 
 function renderMainContent() {
@@ -880,8 +909,8 @@ function render() {
     if (!document.getElementById('sidebar-root')) {
         appDiv.innerHTML = `
             <div class="flex flex-col md:flex-row w-full font-sans min-h-screen">
-                <div id="sidebar-root" class="w-full md:w-80 bg-white/95 backdrop-blur-xl shadow-2xl flex flex-col no-print md:sticky md:top-0 border-r border-slate-200/50 z-10 md:h-screen"></div>
-                <div class="flex-1 p-4 md:p-10 lg:px-16 lg:py-12 bg-slate-50/85 backdrop-blur-md min-h-screen no-print">
+                <div id="sidebar-root" class="w-full md:w-80 bg-white/95 shadow-xl flex flex-col no-print md:sticky md:top-0 border-r border-slate-200 z-10 md:h-screen backdrop-blur-md"></div>
+                <div class="flex-1 p-4 md:p-10 lg:px-16 lg:py-12 min-h-screen no-print bg-slate-50/85 backdrop-blur-md">
                     <div id="main-root" class="max-w-5xl mx-auto mb-20"></div>
                 </div>
             </div>
@@ -893,6 +922,8 @@ function render() {
 }
 
 function changeView(viewId) {
+    if(state.isSubmitting) return;
+    
     state.tempAnswers = {}; 
     if(viewId === 'activity') {
         state.activityQuest.tempAnswers = {}; 
@@ -944,7 +975,6 @@ function submitMateri(id) {
     
     document.getElementById('sidebar-root').innerHTML = renderSidebarInner();
     renderMainContent();
-    checkAndSyncData();
     window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
 }
 
@@ -984,13 +1014,20 @@ function submitActivityLevel(lvl) {
     
     document.getElementById('sidebar-root').innerHTML = renderSidebarInner();
     renderMainContent();
-    checkAndSyncData();
     window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 function retryActivity(lvl) {
     state.activityQuest.scores[`l${lvl}`] = null;
     state.activityQuest.tempAnswers = {};
+    
+    let gTotal = 0;
+    for(let i=1; i<=5; i++) {
+        gTotal += (state.activityQuest.scores[`l${i}`] || 0);
+    }
+    state.activityQuest.totalPoints = gTotal;
+    
+    document.getElementById('sidebar-root').innerHTML = renderSidebarInner();
     renderMainContent();
 }
 
@@ -1006,16 +1043,11 @@ function changeQuestLevel(lvl) {
 
 function savePlan() {
     state.actionPlan = document.getElementById('planText').value;
-    if(state.actionPlan.trim() === '') {
-        showToast("Rencana Aksi tidak boleh kosong!", "error");
-        return;
-    }
-    showToast("Komitmen Rencana Aksi Disimpan!", "success");
     document.getElementById('sidebar-root').innerHTML = renderSidebarInner();
-    checkAndSyncData();
+    showToast("Komitmen Rencana Aksi Disimpan!", "success");
 }
 
-function submitFinalTest() {
+async function submitFinalTest() {
     let uncompleted = false;
     finalTestHOTS.forEach(q => {
         if (state.tempAnswers[q.id] === undefined || (Array.isArray(state.tempAnswers[q.id]) && state.tempAnswers[q.id].length === 0)) {
@@ -1025,6 +1057,20 @@ function submitFinalTest() {
 
     if (uncompleted) {
         showToast("Mohon jawab seluruh 20 studi kasus.", "warning");
+        return;
+    }
+
+    // Pastikan semua syarat terpenuhi (Kecuali Final Score yang sedang diuji)
+    const isReadyForCert = 
+        state.scores.m1 !== null && 
+        state.scores.m2 !== null && 
+        state.scores.m3 !== null && 
+        state.scores.m4 !== null && 
+        state.activityQuest.scores.l5 !== null && state.activityQuest.scores.l5 >= 80 &&
+        state.actionPlan.trim() !== '';
+
+    if (!isReadyForCert) {
+        showToast("Anda belum menyelesaikan seluruh Materi, Aktivitas Mandiri, atau Rencana Aksi!", "error");
         return;
     }
 
@@ -1042,15 +1088,51 @@ function submitFinalTest() {
 
     state.finalScore = (correctCount / 20) * 100;
     
+    // Tampilkan Loading UI
+    state.isSubmitting = true;
+    renderMainContent();
+    
     if (state.finalScore >= 70) {
-        showToast(`Skor: ${state.finalScore}. Mengecek kelengkapan LMS...`, "success");
+        // Prepare data to send to Google Sheets
+        const payload = {
+            waktu: new Date().toLocaleString('id-ID'),
+            nama: state.user.name,
+            sekolah: state.user.school,
+            m1: state.scores.m1,
+            m2: state.scores.m2,
+            m3: state.scores.m3,
+            m4: state.scores.m4,
+            a1: state.activityQuest.scores.l1,
+            a2: state.activityQuest.scores.l2,
+            a3: state.activityQuest.scores.l3,
+            a4: state.activityQuest.scores.l4,
+            a5: state.activityQuest.scores.l5,
+            aksi: state.actionPlan,
+            tes: state.finalScore
+        };
+
+        try {
+            await fetch(GOOGLE_APP_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            // Success
+            state.isSubmitting = false;
+            showToast(`LULUS! Skor Anda ${state.finalScore}. Sertifikat terbuka dan data telah disimpan.`, "success");
+        } catch (error) {
+            console.error(error);
+            state.isSubmitting = false;
+            showToast(`Skor Anda ${state.finalScore}. Sertifikat terbuka, namun gagal sinkronisasi server.`, "warning");
+        }
     } else {
-        showToast(`Skor: ${state.finalScore}. Butuh 70 untuk lulus.`, "error");
+        state.isSubmitting = false;
+        showToast(`Skor: ${state.finalScore}. Butuh 70 untuk lulus. Evaluasi dan coba lagi.`, "error");
     }
     
     document.getElementById('sidebar-root').innerHTML = renderSidebarInner();
     renderMainContent();
-    checkAndSyncData();
     window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
